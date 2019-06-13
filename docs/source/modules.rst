@@ -1,17 +1,7 @@
 Modules
 ================================
 
-GAMNet
+APIs
 ---------
-.. automodule:: xnn.gamnet
-  :members:
-
-xNN
----------
-.. automodule:: xnn.xnn
-  :members:
-
-SOSxNN
----------
-.. automodule:: xnn.sosxnn
+.. automodule:: xnn
   :members:

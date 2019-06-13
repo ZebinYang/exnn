@@ -23,6 +23,7 @@ pygments_style = 'sphinx'
 html_theme = 'sphinx_rtd_theme'
 autoclass_content = "both"
 
+
 html_show_sourcelink = True
 html_context = {
   'display_github': True,

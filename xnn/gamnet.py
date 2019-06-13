@@ -15,7 +15,8 @@ class GAMNet(BaseNet):
     :param input_dummy_num: optional, default=0, the number of dummy variables.
 
     :type  subnet_layers: list
-    :param subnet_layers: optional, default=(10, 6), the architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.
+    :param subnet_layers: optional, default=(10, 6).
+        The architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.
 
     :type  task: string
     :param task: optional, one of {"Regression", "Classification"}, default="Regression". Only support binary classification at current version.
@@ -30,13 +31,15 @@ class GAMNet(BaseNet):
     :param tune_epochs: optional, default=500, number of tuning epochs.
 
     :type  activation: tf object
-    :param activation: optional, default=tf.tanh, activation function for the hidden layer of subnetworks. It can be any tensorflow activation function object.
+    :param activation: optional, default=tf.tanh.
+        Activation function for the hidden layer of subnetworks. It can be any tensorflow activation function object.
 
     :type  lr_BP: float
     :param lr_BP: optional, default=0.001, learning rate for weight updates.
 
     :type  beta_threshold: float
-    :param beta_threshold: optional, default=0.01, percentage threshold for pruning the subnetworks, which means the subnetworks that sum up to 95% of the total sclae will be kept.
+    :param beta_threshold: optional, default=0.01.
+        Percentage threshold for pruning the subnetworks, which means the subnetworks that sum up to 95% of the total sclae will be kept.
 
     :type  l1_proj: float
     :param l1_proj: optional, default=0.001, the strength of L1 penalty for projection layer.
@@ -48,11 +51,11 @@ class GAMNet(BaseNet):
     :param verbose: optional, default=False. If True, detailed messages will be printed.
 
     :type  val_ratio : float
-    :param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
+    :param val_ratio : optional, default=0.2. 
+        The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
 
     :type  early_stop_thres: int
     :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.
-
     
     """
 

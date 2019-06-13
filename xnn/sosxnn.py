@@ -62,7 +62,6 @@ class SOSxNN(BaseNet):
     :type  early_stop_thres: int
     :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.
 
-
     Notes
     -----
     xNN is based on our paper (Yang et al. 2018) with the following implementation details:

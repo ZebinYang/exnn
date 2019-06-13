@@ -83,9 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-xnn.gamnet">GAMNet</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-xnn.xnn">xNN</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-xnn.sosxnn">SOSxNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-xnn">APIs</a></li>
 </ul>
 </li>
 </ul>
@@ -156,27 +154,21 @@
             
   <div class="section" id="modules">
 <h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-xnn.gamnet">
-<span id="gamnet"></span><h2>GAMNet<a class="headerlink" href="#module-xnn.gamnet" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-xnn">
+<span id="apis"></span><h2>APIs<a class="headerlink" href="#module-xnn" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="xnn.gamnet.GAMNet">
-<em class="property">class </em><code class="descclassname">xnn.gamnet.</code><code class="descname">GAMNet</code><span class="sig-paren">(</span><em>input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task='Regression', activation_func=&lt;function tanh&gt;, batch_size=100, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/gamnet.html#GAMNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.gamnet.GAMNet" title="Permalink to this definition">¶</a></dt>
+<dt id="xnn.xNN">
+<em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">xNN</code><span class="sig-paren">(</span><em>input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task='Regression', activation_func=&lt;function tanh&gt;, batch_size=100, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, verbose=False, val_ratio=0, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/xnn.html#xNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.xNN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-xnn.xnn">
-<span id="xnn"></span><h2>xNN<a class="headerlink" href="#module-xnn.xnn" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="xnn.xnn.xNN">
-<em class="property">class </em><code class="descclassname">xnn.xnn.</code><code class="descname">xNN</code><span class="sig-paren">(</span><em>input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task='Regression', activation_func=&lt;function tanh&gt;, batch_size=100, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, verbose=False, val_ratio=0, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/xnn.html#xNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.xnn.xNN" title="Permalink to this definition">¶</a></dt>
+<dt id="xnn.SOSxNN">
+<em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">SOSxNN</code><span class="sig-paren">(</span><em>input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task='Regression', activation_func=&lt;function tanh&gt;, batch_size=100, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/sosxnn.html#SOSxNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.SOSxNN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-xnn.sosxnn">
-<span id="sosxnn"></span><h2>SOSxNN<a class="headerlink" href="#module-xnn.sosxnn" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="xnn.sosxnn.SOSxNN">
-<em class="property">class </em><code class="descclassname">xnn.sosxnn.</code><code class="descname">SOSxNN</code><span class="sig-paren">(</span><em>input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task='Regression', activation_func=&lt;function tanh&gt;, batch_size=100, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/sosxnn.html#SOSxNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.sosxnn.SOSxNN" title="Permalink to this definition">¶</a></dt>
+<dt id="xnn.GAMNet">
+<em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">GAMNet</code><span class="sig-paren">(</span><em>input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task='Regression', activation_func=&lt;function tanh&gt;, batch_size=100, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/gamnet.html#GAMNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.GAMNet" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
