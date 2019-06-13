@@ -1,0 +1,12 @@
+### Dependencies        
+### To install, run:    
+### $ pip install -r requirements.txt   
+
+## data processing ##
+numpy>=1.15.2
+pandas
+
+## visualization ##
+seaborn
+matplotlib>=2.2.2
+

@@ -8,6 +8,10 @@ from .layers import ProjectLayer, SubnetworkBlock, OutputLayer
 
 
 class BaseNet(tf.keras.Model):
+    """
+    Abstract Class.
+
+    """
 
     def __init__(self, input_num,
                  input_dummy_num=0,

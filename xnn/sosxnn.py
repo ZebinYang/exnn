@@ -3,11 +3,88 @@ from .base import BaseNet
 
 
 class SOSxNN(BaseNet):
+    """
+    Sparse, orthogonal and smooth explainable neural network (SOSxNN).
 
-    def __init__(self, input_num, input_dummy_num=0, subnet_num=10, subnet_arch=[10, 6], task="Regression",
-                 activation_func=tf.tanh, batch_size=100, training_epochs=10000, lr_bp=0.001, lr_cl=0.1,
+    Parameters
+    ----------
+    :type input_num: int
+    :param input_num: the length of input variables excluding multi-class categorical variables.
+
+    :type subnet_num: int
+    :param subnet_num: the number of subnetworks.
+
+    :type  input_dummy_num: int
+    :param input_dummy_num: optional, default=0, the number of dummy variables.
+
+    :type  subnet_layers: list
+    :param subnet_layers: optional, default=(10, 6), the architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.
+
+    :type  task: string
+    :param task: optional, one of {"Regression", "Classification"}, default="Regression". Only support binary classification at current version.
+
+    :type  batch_size: int
+    :param batch_size: optional, default=1000, size of minibatches for stochastic optimizers.
+
+    :type  training_epochs: int
+    :param training_epochs: optional, default=10000, maximum number of training epochs.
+
+    :type  tune_epochs: int
+    :param tune_epochs: optional, default=500, number of tuning epochs.
+
+    :type  activation: tf object
+    :param activation: optional, default=tf.tanh, activation function for the hidden layer of subnetworks. It can be any tensorflow activation function object.
+
+    :type  lr_BP: float
+    :param lr_BP: optional, default=0.001, learning rate for weight updates.
+
+    :type  lr_CL: float
+    :param lr_CL: optional, default=0.1, learning rate of Cayley Transform for updating the projection layer.
+
+    :type  beta_threshold: float
+    :param beta_threshold: optional, default=0.01, percentage threshold for pruning the subnetworks, which means the subnetworks that sum up to 95% of the total sclae will be kept.
+
+    :type  l1_proj: float
+    :param l1_proj: optional, default=0.001, the strength of L1 penalty for projection layer.
+
+    :type  l1_subnet: float
+    :param l1_subnet: optional, default=0.001, the strength of L1 penalty for scaling layer.
+
+    :type  smooth_lambda: float
+    :param smooth_lambda: optional, default=0.000001, the strength of roughness penalty for subnetworks.
+
+    :type  verbose: bool
+    :param verbose: optional, default=False. If True, detailed messages will be printed.
+
+    :type  val_ratio : float
+    :param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
+            
+    :type  early_stop_thres: int
+    :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.
+
+
+    Notes
+    -----
+    xNN is based on our paper (Yang et al. 2018) with the following implementation details:
+    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+    2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
+    3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
+    4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
+    5. We train the network and early stop if no improvement occurs in certain epochs.
+    6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+    7. The pruned network will then be fine-tuned.
+
+    References
+    ----------
+    Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of
+    Neural Networks through Architecture Constraints." 
+    arXiv preprint arXiv:1901.03838 (2019).
+    """
+
+    def __init__(self, input_num, subnet_num, input_dummy_num=0, subnet_arch=[10, 6], task="Regression",
+                 activation_func=tf.tanh, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1,
                  beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=0.000001,
-                 verbose=False, val_ratio=0, early_stop_thres=1000):
+                 verbose=False, val_ratio=0.2, early_stop_thres=1000):
 
         super(SOSxNN, self).__init__(input_num=input_num,
                                      input_dummy_num=input_dummy_num,
