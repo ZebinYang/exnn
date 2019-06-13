@@ -2,9 +2,7 @@
 
 ## Installation 
 ```shell
-pip install git+https://github.com/ajzhanghku/XNN.git
-# with token
-pip install git+https://5a43258969ee1a0d8a385b867fcaef19a9aebfee@github.com/ajzhanghku/XNN.git
+pip install git+https://github.com/zebinyang/sosxnn.git
 ```
 
 
