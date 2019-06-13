@@ -95,7 +95,7 @@ class BaseNet(tf.keras.Model):
         return output
 
     def predict(self, x):
-        return self.apply(tf.cast(x, tf.float32), training=False)
+        return self.apply(tf.cast(x, tf.float32), training=False).numpy()
 
     @tf.function
     def train_step_init(self, inputs, labels):
