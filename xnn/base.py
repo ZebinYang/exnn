@@ -28,7 +28,7 @@ class BaseNet(tf.keras.Model):
                  batch_size=100,
                  training_epochs=10000,
                  tuning_epochs=500,
-                 beta_threshold=0.01,
+                 beta_threshold=0.05,
                  verbose=False,
                  val_ratio=0.2,
                  early_stop_thres=1000):
@@ -118,8 +118,8 @@ class BaseNet(tf.keras.Model):
 
         subnets_scale = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
         sorted_index = np.argsort(subnets_scale)
-        # active_index = sorted_index[subnets_scale[sorted_index].cumsum()>self.beta_threshold][::-1]
-        active_index = sorted_index[subnets_scale[sorted_index]>self.beta_threshold][::-1]
+        active_index = sorted_index[subnets_scale[sorted_index].cumsum()>self.beta_threshold][::-1]
+        # active_index = sorted_index[subnets_scale[sorted_index]>self.beta_threshold][::-1]
         return active_index, beta, subnets_scale
 
     def fit(self, train_x, train_y):
