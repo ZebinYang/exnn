@@ -64,7 +64,7 @@ class SOSxNN(BaseNet):
 
     Notes
     -----
-    xNN is based on our paper (Yang et al. 2018) with the following implementation details:
+    SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
     1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
     2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
     3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
