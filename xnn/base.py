@@ -132,10 +132,12 @@ class BaseNet(tf.keras.Model):
         val_y = train_y[int(round((1 - self.val_ratio) * train_x.shape[0])):, :]
 
         # 1. Training
+        if self.verbose:
+            print("Initial training.")
+
         last_improvement = 0
         best_validation = np.inf
         train_size = tr_x.shape[0]
-        print("Initial training.")
         for epoch in range(self.training_epochs):
             shuffle_index = np.arange(tr_x.shape[0])
             np.random.shuffle(shuffle_index)
