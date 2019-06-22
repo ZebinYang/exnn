@@ -162,14 +162,18 @@ class BaseNet(tf.keras.Model):
                 break
 
         # 2. pruning
-        print("Subnetwork pruning.")
+        if self.verbose:
+            print("Subnetwork pruning.")
+
         active_index, _, _ = self.get_active_subnets()
         scal_factor = np.zeros((self.subnet_num, 1))
         scal_factor[active_index] = 1
         self.output_layer.subnet_swicher.assign(tf.constant(scal_factor, dtype=tf.float32))
 
         # 3. fine tune
-        print("Fine tuning.")
+        if self.verbose:
+            print("Fine tuning.")
+            
         for epoch in range(self.tuning_epochs):
             shuffle_index = np.arange(tr_x.shape[0])
             np.random.shuffle(shuffle_index)
