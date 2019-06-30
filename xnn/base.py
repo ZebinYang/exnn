@@ -154,18 +154,18 @@ class BaseNet(tf.keras.Model):
                 batch_yy = tr_y[offset:(offset + self.batch_size)]
                 self.train_step_init(tf.cast(batch_xx, tf.float32), batch_yy)
 
-#             self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
-#             self.err_val.append(self.evaluate(val_x, val_y, training=True))
-#             if self.verbose & (epoch % 1 == 0):
-#                 print("Training epoch: %d, train loss: %0.5f, val loss: %0.5f" %
-#                       (epoch + 1, self.err_train[-1], self.err_val[-1]))
+            self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
+            self.err_val.append(self.evaluate(val_x, val_y, training=True))
+            if self.verbose & (epoch % 1 == 0):
+                print("Training epoch: %d, train loss: %0.5f, val loss: %0.5f" %
+                      (epoch + 1, self.err_train[-1], self.err_val[-1]))
 
-#             if self.err_val[-1] < best_validation:
-#                 best_validation = self.err_val[-1]
-#                 last_improvement = epoch
-#             if epoch - last_improvement > self.early_stop_thres:
-#                 print("Early stop at epoch %d, With Testing Error: %0.5f" % (epoch + 1, self.err_val[-1]))
-#                 break
+            if self.err_val[-1] < best_validation:
+                best_validation = self.err_val[-1]
+                last_improvement = epoch
+            if epoch - last_improvement > self.early_stop_thres:
+                print("Early stop at epoch %d, With Testing Error: %0.5f" % (epoch + 1, self.err_val[-1]))
+                break
 
         # 2. pruning
         if self.verbose:
@@ -192,13 +192,13 @@ class BaseNet(tf.keras.Model):
                 batch_yy = tr_y[offset:(offset + self.batch_size)]
                 self.train_step_finetune(tf.cast(batch_xx, tf.float32), batch_yy)
 
-#             self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
-#             self.err_val.append(self.evaluate(val_x, val_y, training=True))
-#             if self.verbose & (epoch % 1 == 0):
-#                 print("Tuning epoch: %d, train loss: %0.5f, val loss: %0.5f" %
-#                       (epoch + 1, self.err_train[-1], self.err_val[-1]))
+            self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
+            self.err_val.append(self.evaluate(val_x, val_y, training=True))
+            if self.verbose & (epoch % 1 == 0):
+                print("Tuning epoch: %d, train loss: %0.5f, val loss: %0.5f" %
+                      (epoch + 1, self.err_train[-1], self.err_val[-1]))
 
-#         self.evaluate(train_x, train_y, training=True)
+        self.evaluate(train_x, train_y, training=True)
         # record the key values in the network
         self.subnet_input_min = []
         self.subnet_input_max = []
