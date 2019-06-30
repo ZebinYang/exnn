@@ -90,11 +90,10 @@ class Subnetwork(tf.keras.layers.Layer):
         self.grad2 = t1.gradient(self.grad1, inputs)
 
         if training:
-            mean, norm = tf.reduce_mean(self.output_original, 0), tf.maximum(tf.math.reduce_std(self.output_original, 0), 1e-10) 
-            self.subnet_mean = mean
-            self.subnet_norm = norm
-            self.moving_mean.assign(mean)
-            self.moving_norm.assign(norm)
+            self.subnet_mean = tf.reduce_mean(self.output_original, 0)
+            self.subnet_norm = tf.maximum(tf.math.reduce_std(self.output_original, 0), 1e-10) 
+            self.moving_mean.assign(self.subnet_mean)
+            self.moving_norm.assign(self.subnet_norm)
         else:
             self.subnet_mean = self.moving_mean
             self.subnet_norm = self.moving_norm
