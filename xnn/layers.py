@@ -119,7 +119,7 @@ class SubnetworkBlock(tf.keras.layers.Layer):
 
     def build(self, input_shape=None):
         self.subnets = []
-        for subnet in range(self.subnet_num):
+        for i in range(self.subnet_num):
             self.subnets.append(Subnetwork(self.subnet_arch,
                                            self.activation_func,
                                            self.smooth_lambda,
