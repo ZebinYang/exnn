@@ -9,5 +9,5 @@ setup(name='xnn',
       license='GPL',
       packages=['xnn'],
       install_requires=[
-          'matplotlib>=2.2.2','tensorflow==2.0.0a0', 'numpy>=1.15.2'],
+          'matplotlib>=2.2.2','tensorflow>=2.0.0b0', 'numpy>=1.15.2'],
       zip_safe=False)
