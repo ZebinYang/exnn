@@ -110,7 +110,7 @@ class BaseNet(tf.keras.Model):
         return self.loss_fn(y, self.apply(tf.cast(x, tf.float32), training=training))
 
     def evaluate(self, x, y, training=False):
-        return self.evaluate_graph(x, y, training=False).numpy()
+        return self.evaluate_graph(x, y, training=training).numpy()
 
     @tf.function
     def train_step_init(self, inputs, labels):
