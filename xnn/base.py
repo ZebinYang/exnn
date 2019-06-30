@@ -99,12 +99,18 @@ class BaseNet(tf.keras.Model):
         return output
 
     @tf.function
-    def predict(self, x):
+    def predict_graph(self, x):
         return self.apply(tf.cast(x, tf.float32), training=False)
+
+    def predict(self, x):
+        return self.predict_graph(x).numpy()
     
     @tf.function
-    def evaluate(self, x, y, training=False):
+    def evaluate_graph(self, x, y, training=False):
         return self.loss_fn(y, self.apply(tf.cast(x, tf.float32), training=training))
+
+    def evaluate(self, x, y, training=False):
+        return self.evaluate_graph(x, y, training=False).numpy()
 
     @tf.function
     def train_step_init(self, inputs, labels):
