@@ -85,7 +85,7 @@ class xNN(BaseNet):
                                   subnet_arch=subnet_arch,
                                   task=task,
                                   proj_method="comb",
-                                  activation_func=tf.tanh,
+                                  activation_func=activation_func,
                                   bn_flag=False,
                                   lr_bp=lr_bp,
                                   l1_proj=l1_proj,

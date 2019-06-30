@@ -98,8 +98,13 @@ class BaseNet(tf.keras.Model):
         
         return output
 
+    @tf.function
     def predict(self, x):
-        return self.apply(tf.cast(x, tf.float32), training=False).numpy()
+        return self.apply(tf.cast(x, tf.float32), training=False)
+    
+    @tf.function
+    def evaluate(self, x, y, training=False):
+        return self.loss_fn(y, self.apply(tf.cast(x, tf.float32), training=training))
 
     @tf.function
     def train_step_init(self, inputs, labels):
@@ -113,13 +118,12 @@ class BaseNet(tf.keras.Model):
         if self.bn_flag:
             beta = self.output_layer.output_weights.numpy() * self.output_layer.subnet_swicher.numpy()
         else:
-            subnet_norm = [self.subnet_blocks.subnets[i].subnet_bn.moving_variance.numpy()[0] ** 0.5 for i in range(self.subnet_num)]
+            subnet_norm = [self.subnet_blocks.subnets[i].subnet_norm.numpy()[0] for i in range(self.subnet_num)]
             beta = self.output_layer.output_weights.numpy() * np.array([subnet_norm]).reshape([-1, 1]) * self.output_layer.subnet_swicher.numpy()
 
         subnets_scale = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
         sorted_index = np.argsort(subnets_scale)
         active_index = sorted_index[subnets_scale[sorted_index].cumsum()>self.beta_threshold][::-1]
-        # active_index = sorted_index[subnets_scale[sorted_index]>self.beta_threshold][::-1]
         return active_index, beta, subnets_scale
 
     def fit(self, train_x, train_y):
@@ -150,8 +154,8 @@ class BaseNet(tf.keras.Model):
                 batch_yy = tr_y[offset:(offset + self.batch_size)]
                 self.train_step_init(tf.cast(batch_xx, tf.float32), batch_yy)
 
-            self.err_train.append(self.loss_fn(tr_y, self.apply(tf.cast(tr_x, tf.float32), training=True)).numpy())
-            self.err_val.append(self.loss_fn(val_y, self.apply(tf.cast(val_x, tf.float32), training=True)).numpy())
+            self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
+            self.err_val.append(self.evaluate(val_x, val_y, training=True))
             if self.verbose & (epoch % 1 == 0):
                 print("Training epoch: %d, train loss: %0.5f, val loss: %0.5f" %
                       (epoch + 1, self.err_train[-1], self.err_val[-1]))
@@ -188,12 +192,13 @@ class BaseNet(tf.keras.Model):
                 batch_yy = tr_y[offset:(offset + self.batch_size)]
                 self.train_step_finetune(tf.cast(batch_xx, tf.float32), batch_yy)
 
-            self.err_train.append(self.loss_fn(tr_y, self.apply(tf.cast(tr_x, tf.float32), training=True)).numpy())
-            self.err_val.append(self.loss_fn(val_y, self.apply(tf.cast(val_x, tf.float32), training=True)).numpy())
+            self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
+            self.err_val.append(self.evaluate(val_x, val_y, training=True))
             if self.verbose & (epoch % 1 == 0):
                 print("Tuning epoch: %d, train loss: %0.5f, val loss: %0.5f" %
                       (epoch + 1, self.err_train[-1], self.err_val[-1]))
 
+        self.evaluate(train_x, train_y, training=True)
         # record the key values in the network
         self.subnet_input_min = []
         self.subnet_input_max = []
@@ -240,9 +245,10 @@ class BaseNet(tf.keras.Model):
                 np.min(subnets_outputs), np.max(subnets_outputs), 6), 2)
             ax1.set_yticks(yint)
             ax1.set_yticklabels(["{0: .2f}".format(j) for j in yint])
-            legend_style = mlines.Line2D([], [], color='black', marker='o', linewidth=0.0, markersize=6,
-                                         label='Scale: ' + str(np.round(100 * subnets_scale[indice], 1)) + "%")
-            plt.legend(handles=[legend_style], fontsize=18)
+            ax1.set_ylim([np.min(subnets_outputs) - (np.max(subnets_outputs) - np.min(subnets_outputs))*0.1, 
+                      np.max(subnets_outputs) + (np.max(subnets_outputs) - np.min(subnets_outputs))*0.25])
+            ax1.text(0.25, 0.9,'Scale: ' + str(np.round(100 * subnets_scale[indice], 1)) + "%",
+                  fontsize=16,  horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
 
             ax2 = f.add_subplot(np.int(max_ids), 2, i * 2 + 2)
             ax2.bar(np.arange(input_size), coef_index.T[indice, :input_size])

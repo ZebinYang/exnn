@@ -91,7 +91,7 @@ class SOSxNN(BaseNet):
                                      subnet_arch=subnet_arch,
                                      task=task,
                                      proj_method="orthogonal",
-                                     activation_func=tf.tanh,
+                                     activation_func=activation_func,
                                      bn_flag=True,
                                      lr_bp=lr_bp,
                                      l1_proj=l1_proj,

@@ -51,6 +51,7 @@ class ProjectLayer(tf.keras.layers.Layer):
                                             initializer=self.kernel_iniializer,
                                             trainable=self.trainable,
                                             regularizer=tf.keras.regularizers.l1(self.l1_proj))
+        self.built = True
 
     def call(self, inputs, training=False):
         output = tf.matmul(inputs, self.proj_weights)
@@ -59,19 +60,22 @@ class ProjectLayer(tf.keras.layers.Layer):
 
 class Subnetwork(tf.keras.layers.Layer):
 
-    def __init__(self, subnet_arch=[10, 6], activation_func=tf.tanh, smooth_lambda=0.0, bn_flag=False):
+    def __init__(self, subnet_arch=[10, 6], activation_func=tf.tanh, smooth_lambda=0.0, bn_flag=False, subnet_id=0):
         super(Subnetwork, self).__init__()
         self.dense = []
         self.subnet_arch = subnet_arch
         self.activation_func = activation_func
         self.smooth_lambda = smooth_lambda
         self.bn_flag = bn_flag
+        self.subnet_id = subnet_id
 
     def build(self, input_shape=None):
         for nodes in self.subnet_arch:
             self.dense.append(layers.Dense(nodes, activation=self.activation_func))
-        self.output_layer = layers.Dense(1, activation=tf.identity)
-        self.subnet_bn = BatchNormalization(momentum=0.0, epsilon=1e-10, center=False, scale=False)
+        self.output_layer = layers.Dense(1, activation=self.activation_func)
+        self.moving_mean = self.add_weight(name="mean"+str(self.subnet_id), shape=[1], initializer=tf.zeros_initializer(),trainable=False)
+        self.moving_norm = self.add_weight(name="norm"+str(self.subnet_id), shape=[1], initializer=tf.ones_initializer(),trainable=False)
+        self.built = True      
 
     def call(self, inputs, training=False):
         with tf.GradientTape() as t1:
@@ -85,12 +89,21 @@ class Subnetwork(tf.keras.layers.Layer):
             self.grad1 = t2.gradient(self.output_original, inputs)
         self.grad2 = t1.gradient(self.grad1, inputs)
 
-        if self.bn_flag:
-            output = self.subnet_bn(self.output_original, training=training)
+        if training:
+            mean, norm = tf.reduce_mean(self.output_original, 0), tf.maximum(tf.math.reduce_std(self.output_original, 0), 1e-10) 
+            self.subnet_mean = mean
+            self.subnet_norm = norm
+            self.moving_mean.assign(mean)
+            self.moving_norm.assign(norm)
         else:
-            _ = self.subnet_bn(self.output_original, training=training)
+            self.subnet_mean = self.moving_mean
+            self.subnet_norm = self.moving_norm
+
+        if self.bn_flag:
+            output = (self.output_original - self.subnet_mean) / (self.subnet_norm)
+        else:
             output = self.output_original
-        self.smooth_penalty = tf.reduce_mean(tf.square(self.grad2)) / tf.sqrt(self.subnet_bn.moving_variance)
+        self.smooth_penalty = tf.reduce_mean(tf.square(self.grad2)) / self.subnet_norm
         return output
 
 
@@ -110,7 +123,8 @@ class SubnetworkBlock(tf.keras.layers.Layer):
             self.subnets.append(Subnetwork(self.subnet_arch,
                                            self.activation_func,
                                            self.smooth_lambda,
-                                           self.bn_flag))
+                                           self.bn_flag,
+                                           subnet_id=i))
         self.built = True
 
     def call(self, inputs, training=False):
@@ -149,6 +163,7 @@ class OutputLayer(tf.keras.layers.Layer):
                                            shape=[1],
                                            initializer=tf.zeros_initializer(),
                                            trainable=True)
+        self.built = True
 
     def call(self, inputs, training=False):
         output = (tf.matmul(inputs, self.subnet_swicher * self.output_weights) + self.output_bias)

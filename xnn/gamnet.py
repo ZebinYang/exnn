@@ -70,7 +70,7 @@ class GAMNet(BaseNet):
                                      subnet_arch=subnet_arch,
                                      task=task,
                                      proj_method="gam",
-                                     activation_func=tf.tanh,
+                                     activation_func=activation_func,
                                      bn_flag=True,
                                      lr_bp=lr_bp,
                                      l1_proj=0,
