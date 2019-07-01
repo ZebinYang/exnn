@@ -71,8 +71,8 @@ class Subnetwork(tf.keras.layers.Layer):
 
     def build(self, input_shape=None):
         for nodes in self.subnet_arch:
-            self.dense.append(layers.Dense(nodes, activation=self.activation_func))
-        self.output_layer = layers.Dense(1, activation=self.activation_func)
+            self.dense.append(layers.Dense(nodes, activation=self.activation_func, kernel_initializer=tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.1)))
+        self.output_layer = layers.Dense(1, activation=self.activation_func, kernel_initializer=tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.1))
         self.moving_mean = self.add_weight(name="mean"+str(self.subnet_id), shape=[1], initializer=tf.zeros_initializer(),trainable=False)
         self.moving_norm = self.add_weight(name="norm"+str(self.subnet_id), shape=[1], initializer=tf.ones_initializer(),trainable=False)
         self.built = True      
@@ -151,7 +151,7 @@ class OutputLayer(tf.keras.layers.Layer):
     def build(self, input_shape=None):
         self.output_weights = self.add_weight(name="output_weights",
                                               shape=[self.subnet_num, 1],
-                                              initializer=tf.keras.initializers.RandomNormal(),
+                                              initializer=tf.keras.initializers.RandomNormal(mean=0.0, stddev=1),
                                               regularizer=tf.keras.regularizers.l1(self.l1_subnet),
                                               trainable=True)
         self.subnet_swicher = self.add_weight(name="switcher",
