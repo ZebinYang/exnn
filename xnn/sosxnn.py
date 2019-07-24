@@ -58,7 +58,7 @@ class SOSxNN(BaseNet):
 
     :type  val_ratio : float
     :param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
-            
+
     :type  early_stop_thres: int
     :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.
 
@@ -76,20 +76,20 @@ class SOSxNN(BaseNet):
     References
     ----------
     Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of
-    Neural Networks through Architecture Constraints." 
+    Neural Networks through Architecture Constraints."
     arXiv preprint arXiv:1901.03838 (2019).
     """
 
-    def __init__(self, input_num, subnet_num, input_dummy_num=0, subnet_arch=[10, 6], task="Regression",
+    def __init__(self, input_num, subnet_num, meta_info=0, subnet_arch=[10, 6], task_type="Regression",
                  activation_func=tf.tanh, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1,
                  beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=0.000001,
-                 verbose=False, val_ratio=0.2, early_stop_thres=1000):
+                 verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0):
 
         super(SOSxNN, self).__init__(input_num=input_num,
-                                     input_dummy_num=input_dummy_num,
+                                     meta_info=meta_info,
                                      subnet_num=subnet_num,
                                      subnet_arch=subnet_arch,
-                                     task=task,
+                                     task_type=task_type,
                                      proj_method="orthogonal",
                                      activation_func=activation_func,
                                      bn_flag=True,
@@ -103,7 +103,8 @@ class SOSxNN(BaseNet):
                                      beta_threshold=beta_threshold,
                                      verbose=verbose,
                                      val_ratio=val_ratio,
-                                     early_stop_thres=early_stop_thres)
+                                     early_stop_thres=early_stop_thres,
+                                     random_state=random_state)
         self.lr_cl = lr_cl
 
     @tf.function
@@ -114,7 +115,7 @@ class SOSxNN(BaseNet):
                 pred_loss = self.loss_fn(labels, pred)
                 regularization_loss = tf.math.add_n(self.proj_layer.losses + self.output_layer.losses)
                 cl_loss = pred_loss + regularization_loss
-                bp_loss = pred_loss + regularization_loss 
+                bp_loss = pred_loss + regularization_loss
                 if self.smooth_lambda > 0:
                     smoothness_loss = self.subnet_blocks.smooth_loss
                     bp_loss += smoothness_loss

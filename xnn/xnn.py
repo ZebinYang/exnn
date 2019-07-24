@@ -10,7 +10,7 @@ class xNN(BaseNet):
     ----------
     :type input_num: int
     :param input_num: the length of input variables, excluding multi-class categorical variables.
-        
+
     :type subnet_num: int
     :param subnet_num: the number of subnetworks.
 
@@ -61,12 +61,12 @@ class xNN(BaseNet):
     xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
     1. Categorical variables should be first converted by one-hot encoding, and we directly link each
       of the dummy variables as a bias term to final output.
-    2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, 
-      considering the number of subnetworks. See the projection_layer function for details. 
-    3. We train the network and early stop if no improvement occurs in certain epochs. 
+    2. The projection layer weights are initialized with univariate coefficient or combination of coefficients,
+      considering the number of subnetworks. See the projection_layer function for details.
+    3. We train the network and early stop if no improvement occurs in certain epochs.
     4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
-    5. The pruned network will then be fine-tuned. 
-    
+    5. The pruned network will then be fine-tuned.
+
     References
     ----------
     J. Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, "Explainable
@@ -74,17 +74,17 @@ class xNN(BaseNet):
     Journal, pp. 40-49, October 2018.
     """
 
-    def __init__(self, input_num, subnet_num, input_dummy_num=0, subnet_arch=[10, 6], task="Regression",
+    def __init__(self, input_num, subnet_num, meta_info=0, subnet_arch=[10, 6], task_type="Regression",
                  activation_func=tf.tanh, batch_size=1000, training_epochs=10000, lr_bp=0.001,
-                 beta_threshold=0.01, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001,
-                 verbose=False, val_ratio=0.2, early_stop_thres=1000):
+                 beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001,
+                 verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0):
 
         super(xNN, self).__init__(input_num=input_num,
-                                  input_dummy_num=input_dummy_num,
+                                  meta_info=meta_info,
                                   subnet_num=subnet_num,
                                   subnet_arch=subnet_arch,
-                                  task=task,
-                                  proj_method="comb",
+                                  task_type=task_type,
+                                  proj_method="random",
                                   activation_func=activation_func,
                                   bn_flag=False,
                                   lr_bp=lr_bp,
@@ -97,7 +97,8 @@ class xNN(BaseNet):
                                   beta_threshold=beta_threshold,
                                   verbose=verbose,
                                   val_ratio=val_ratio,
-                                  early_stop_thres=early_stop_thres)
+                                  early_stop_thres=early_stop_thres,
+                                  random_state=random_state)
 
     @tf.function
     def train_step_init(self, inputs, labels):
