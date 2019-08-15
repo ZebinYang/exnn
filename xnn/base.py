@@ -303,7 +303,7 @@ class BaseNet(tf.keras.Model):
             ax1 = f.add_subplot(np.int(max_ids), 2, i * 2 + 1)
             ax1.plot(subnets_inputs, subnets_outputs)
             
-            xint = np.round(np.linspace(np.min(subnets_inputs), np.max(subnets_inputs), 6), 2)
+            xint = np.round(np.linspace(np.min(subnets_inputs), np.max(subnets_inputs), 5), 2)
             ax1.set_xticks(xint)
             ax1.set_xticklabels(["{0: .2f}".format(j) for j in xint], fontsize=14)
             
@@ -342,8 +342,7 @@ class BaseNet(tf.keras.Model):
                            np.max(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm), 6), 2)
                 ax1.set_xticks(yint)
                 ax1.set_xticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
-
-                ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=24)
+                ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
 
         if max_ids > 0:
             if save_png:
