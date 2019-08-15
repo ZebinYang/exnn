@@ -302,13 +302,18 @@ class BaseNet(tf.keras.Model):
 
             ax1 = f.add_subplot(np.int(max_ids), 2, i * 2 + 1)
             ax1.plot(subnets_inputs, subnets_outputs)
+            
+            xint = np.round(np.linspace(np.min(subnets_inputs), np.max(subnets_inputs), 6), 2)
+            ax1.set_xticks(xint)
+            ax1.set_xticklabels(["{0: .2f}".format(j) for j in xint], fontsize=14)
+            
             yint = np.round(np.linspace(np.min(subnets_outputs), np.max(subnets_outputs), 6), 2)
             ax1.set_yticks(yint)
-            ax1.set_yticklabels(["{0: .2f}".format(j) for j in yint])
+            ax1.set_yticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
             ax1.set_ylim([np.min(subnets_outputs) - (np.max(subnets_outputs) - np.min(subnets_outputs))*0.1, 
                       np.max(subnets_outputs) + (np.max(subnets_outputs) - np.min(subnets_outputs))*0.25])
             ax1.text(0.25, 0.9,'IR: ' + str(np.round(100 * subnets_scale[indice], 1)) + "%",
-                  fontsize=20, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
+                  fontsize=24, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
 
             ax2 = f.add_subplot(np.int(max_ids), 2, i * 2 + 2)
             ax2.bar(np.arange(input_size), coef_index.T[indice, :input_size])
@@ -331,7 +336,13 @@ class BaseNet(tf.keras.Model):
                 ax3 = f.add_subplot(np.int(max_ids), 1, np.int(max_ids))
                 ax3.bar(np.arange(len(self.meta_info[dummy_name]['values'])), np.sign(beta[indice]) * dummy_gamma[:, 0] / norm)
                 ax3.set_xticks(np.arange(len(self.meta_info[dummy_name]['values'])))
-                ax3.set_xticklabels(self.meta_info[self.categ_variable_list[indice - self.numerical_input_num]]['values'])
+                ax3.set_xticklabels(self.meta_info[self.categ_variable_list[indice - self.numerical_input_num]]['values'], fontsize=14)
+
+                yint = np.round(np.linspace(np.min(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm),
+                           np.max(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm), 6), 2)
+                ax1.set_xticks(yint)
+                ax1.set_xticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
+
                 ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=24)
 
         if max_ids > 0:
