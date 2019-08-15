@@ -60,7 +60,7 @@ class BaseNet(tf.keras.Model):
         self.val_ratio = val_ratio
         self.early_stop_thres = early_stop_thres
         self.random_state = random_state
-
+        
         np.random.seed(random_state)
         tf.random.set_seed(random_state)
 
@@ -79,7 +79,7 @@ class BaseNet(tf.keras.Model):
                 self.categ_variable_list.append(key)
                 self.categ_index_list.append(i)
             else:
-                self.numerical_input_num += 1
+                self.numerical_input_num +=1
                 self.noncateg_index_list.append(i)
                 self.noncateg_variable_list.append(key)
 
@@ -89,11 +89,11 @@ class BaseNet(tf.keras.Model):
                                        subnet_num=self.subnet_num,
                                            l1_proj=self.l1_proj,
                                            method=self.proj_method)
-
-        self.categ_blocks = CategNetBlock(meta_info=self.meta_info,
-                                          categ_variable_list=self.categ_variable_list,
-                                          categ_index_list=self.categ_index_list,
-                                          bn_flag=self.bn_flag)
+        
+        self.categ_blocks = CategNetBlock(meta_info=self.meta_info, 
+                                         categ_variable_list=self.categ_variable_list, 
+                                         categ_index_list=self.categ_index_list,
+                                         bn_flag=self.bn_flag)
 
         self.subnet_blocks = SubnetworkBlock(subnet_num=self.subnet_num,
                                              subnet_arch=self.subnet_arch,
@@ -115,7 +115,7 @@ class BaseNet(tf.keras.Model):
         self.proj_outputs = self.proj_layer(inputs, training=training)
         self.categ_outputs = self.categ_blocks(inputs, training=training)
         self.subnet_outputs = self.subnet_blocks(self.proj_outputs, training=training)
-
+        
         concat_list = []
         if self.numerical_input_num > 0:
             concat_list.append(self.subnet_outputs)
@@ -128,7 +128,7 @@ class BaseNet(tf.keras.Model):
             output = tf.nn.sigmoid(self.output_layer(tf.concat(concat_list, 1)))
         else:
             raise ValueError('The task type is not supported')
-
+        
         return output
 
     @tf.function
@@ -137,7 +137,7 @@ class BaseNet(tf.keras.Model):
 
     def predict(self, x):
         return self.predict_graph(x).numpy()
-
+    
     @tf.function
     def evaluate_graph(self, x, y, training=False):
         return self.loss_fn(y, self.apply(tf.cast(x, tf.float32), training=training))
@@ -153,7 +153,7 @@ class BaseNet(tf.keras.Model):
     def train_step_finetune(self, inputs, labels):
         pass
 
-
+                                       
     def get_active_subnets(self):
         if self.bn_flag:
             beta = self.output_layer.output_weights.numpy()
@@ -164,8 +164,8 @@ class BaseNet(tf.keras.Model):
         beta = beta * self.output_layer.output_switcher.numpy()
         subnets_scale = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
         sorted_index = np.argsort(subnets_scale)
-        active_index = sorted_index[subnets_scale[sorted_index].cumsum() > self.beta_threshold][::-1]
-
+        active_index = sorted_index[subnets_scale[sorted_index].cumsum()>self.beta_threshold][::-1]
+                                       
         active_me_index = []
         active_categ_index = []
         for i in active_index:
@@ -179,13 +179,13 @@ class BaseNet(tf.keras.Model):
 
         self.err_val = []
         self.err_train = []
-
+    
         if self.task_type == "Regression":
-            tr_x, val_x, tr_y, val_y = train_test_split(train_x, train_y, test_size=self.val_ratio,
-                                                        random_state=self.random_state)
+            tr_x, val_x, tr_y, val_y = train_test_split(train_x, train_y, test_size=self.val_ratio, 
+                                          random_state=self.random_state)
         elif self.task_type == "Classification":
-            tr_x, val_x, tr_y, val_y = train_test_split(train_x, train_y, test_size=self.val_ratio,
-                                                        stratify=train_y, random_state=self.random_state)
+            tr_x, val_x, tr_y, val_y = train_test_split(train_x, train_y, test_size=self.val_ratio, 
+                                      stratify=train_y, random_state=self.random_state)
         # 1. Training
         if self.verbose:
             print("Initial training.")
@@ -206,7 +206,7 @@ class BaseNet(tf.keras.Model):
                 self.train_step_init(tf.cast(batch_xx, tf.float32), batch_yy)
 
             self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
-            self.err_val.append(self.evaluate(val_x, val_y, training=True))
+            self.err_val.append(self.evaluate(val_x, val_y, training=False))
             if self.verbose & (epoch % 1 == 0):
                 print("Training epoch: %d, train loss: %0.5f, val loss: %0.5f" %
                       (epoch + 1, self.err_train[-1], self.err_val[-1]))
@@ -223,7 +223,7 @@ class BaseNet(tf.keras.Model):
         if self.verbose:
             print("Subnetwork pruning.")
 
-        self.evaluate(train_x, train_y, training=True)
+        self.evaluate(tr_x, tr_y, training=True)
         active_me_index, active_categ_index, _, _ = self.get_active_subnets()
         scal_factor = np.zeros((self.subnet_num + self.categ_variable_num, 1))
         scal_factor[active_me_index] = 1
@@ -233,7 +233,7 @@ class BaseNet(tf.keras.Model):
         # 3. fine tune
         if self.verbose:
             print("Fine tuning.")
-
+            
         last_improvement = 0
         best_validation = np.inf
         for epoch in range(self.tuning_epochs):
@@ -249,12 +249,11 @@ class BaseNet(tf.keras.Model):
                 self.train_step_finetune(tf.cast(batch_xx, tf.float32), batch_yy)
 
             self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
-            self.err_val.append(self.evaluate(val_x, val_y, training=True))
-
+            self.err_val.append(self.evaluate(val_x, val_y, training=False))
             if self.verbose & (epoch % 1 == 0):
                 print("Tuning epoch: %d, train loss: %0.5f, val loss: %0.5f" %
                       (epoch + 1, self.err_train[-1], self.err_val[-1]))
-
+            
             if self.err_val[-1] < best_validation:
                 best_validation = self.err_val[-1]
                 last_improvement = epoch
@@ -268,8 +267,8 @@ class BaseNet(tf.keras.Model):
         self.subnet_input_min = []
         self.subnet_input_max = []
         for i in range(self.subnet_num):
-            min_ = np.dot(train_x[:, self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].min()
-            max_ = np.dot(train_x[:, self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].max()
+            min_ = np.dot(train_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].min()
+            max_ = np.dot(train_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].max()
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
 
@@ -306,10 +305,10 @@ class BaseNet(tf.keras.Model):
             yint = np.round(np.linspace(np.min(subnets_outputs), np.max(subnets_outputs), 6), 2)
             ax1.set_yticks(yint)
             ax1.set_yticklabels(["{0: .2f}".format(j) for j in yint])
-            ax1.set_ylim([np.min(subnets_outputs) - (np.max(subnets_outputs) - np.min(subnets_outputs)) * 0.1,
-                          np.max(subnets_outputs) + (np.max(subnets_outputs) - np.min(subnets_outputs)) * 0.25])
-            ax1.text(0.25, 0.9, 'Scale: ' + str(np.round(100 * subnets_scale[indice], 1)) + "%",
-                     fontsize=16, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
+            ax1.set_ylim([np.min(subnets_outputs) - (np.max(subnets_outputs) - np.min(subnets_outputs))*0.1, 
+                      np.max(subnets_outputs) + (np.max(subnets_outputs) - np.min(subnets_outputs))*0.25])
+            ax1.text(0.25, 0.9,'IR: ' + str(np.round(100 * subnets_scale[indice], 1)) + "%",
+                  fontsize=20, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
 
             ax2 = f.add_subplot(np.int(max_ids), 2, i * 2 + 2)
             ax2.bar(np.arange(input_size), coef_index.T[indice, :input_size])
@@ -333,7 +332,7 @@ class BaseNet(tf.keras.Model):
                 ax3.bar(np.arange(len(self.meta_info[dummy_name]['values'])), np.sign(beta[indice]) * dummy_gamma[:, 0] / norm)
                 ax3.set_xticks(np.arange(len(self.meta_info[dummy_name]['values'])))
                 ax3.set_xticklabels(self.meta_info[self.categ_variable_list[indice - self.numerical_input_num]]['values'])
-                ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=16)
+                ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=24)
 
         if max_ids > 0:
             if save_png:
