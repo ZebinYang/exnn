@@ -262,7 +262,6 @@ class BaseNet(tf.keras.Model):
                     print("Early stop at epoch %d, With Testing Error: %0.5f" % (epoch + 1, self.err_val[-1]))
                 break
 
-        self.evaluate(tr_x, tr_y, training=True)
         # record the key values in the network
         self.subnet_input_min = []
         self.subnet_input_max = []
@@ -317,6 +316,7 @@ class BaseNet(tf.keras.Model):
 
             ax2 = f.add_subplot(np.int(max_ids), 2, i * 2 + 2)
             ax2.bar(np.arange(input_size), coef_index.T[indice, :input_size])
+
             ax2.set_xticks(np.arange(input_size))
             ax2.set_xticklabels(["X" + str(j + 1) for j in range(input_size)])
 
@@ -340,8 +340,8 @@ class BaseNet(tf.keras.Model):
 
                 yint = np.round(np.linspace(np.min(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm),
                            np.max(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm), 6), 2)
-                ax1.set_xticks(yint)
-                ax1.set_xticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
+                ax3.set_yticks(yint)
+                ax3.set_yticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
                 ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
 
         if max_ids > 0:
