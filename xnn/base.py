@@ -223,7 +223,6 @@ class BaseNet(tf.keras.Model):
         if self.verbose:
             print("Subnetwork pruning.")
 
-        self.evaluate(tr_x, tr_y, training=True)
         active_me_index, active_categ_index, _, _ = self.get_active_subnets()
         scal_factor = np.zeros((self.subnet_num + self.categ_variable_num, 1))
         scal_factor[active_me_index] = 1
