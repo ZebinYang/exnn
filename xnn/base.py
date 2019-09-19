@@ -154,7 +154,7 @@ class BaseNet(tf.keras.Model):
         pass
 
                                        
-    def get_active_subnets(self):
+    def get_active_subnets(self, beta_threshold=0):
         if self.bn_flag:
             beta = self.output_layer.output_weights.numpy()
         else:
@@ -164,8 +164,8 @@ class BaseNet(tf.keras.Model):
         beta = beta * self.output_layer.output_switcher.numpy()
         subnets_scale = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
         sorted_index = np.argsort(subnets_scale)
-        active_index = sorted_index[subnets_scale[sorted_index].cumsum()>self.beta_threshold][::-1]
-                                       
+        active_index = sorted_index[subnets_scale[sorted_index].cumsum()>beta_threshold][::-1]
+
         active_me_index = []
         active_categ_index = []
         for i in active_index:
@@ -223,7 +223,7 @@ class BaseNet(tf.keras.Model):
         if self.verbose:
             print("Subnetwork pruning.")
 
-        active_me_index, active_categ_index, _, _ = self.get_active_subnets()
+        active_me_index, active_categ_index, _, _ = self.get_active_subnets(self.beta_threshold)
         scal_factor = np.zeros((self.subnet_num + self.categ_variable_num, 1))
         scal_factor[active_me_index] = 1
         scal_factor[active_categ_index] = 1
