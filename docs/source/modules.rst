@@ -1,7 +1,5 @@
 Modules
 ================================
 
-APIs
----------
-.. automodule:: xnn
-  :members:
+.. toctree::
+    apidoc.rst

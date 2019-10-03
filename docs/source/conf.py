@@ -1,6 +1,5 @@
-
-import sys
 import os
+import sys
 import xnn
 sys.path.insert(0, os.path.abspath('../../xnn/'))
 sys.path.insert(0, os.path.abspath('../_ext'))
