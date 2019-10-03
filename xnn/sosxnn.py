@@ -6,6 +6,15 @@ class SOSxNN(BaseNet):
     """
     Sparse, orthogonal and smooth explainable neural network (SOSxNN).
 
+    SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
+    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+    2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
+    3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
+    4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
+    5. We train the network and early stop if no improvement occurs in certain epochs.
+    6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+    7. The pruned network will then be fine-tuned.
+
     Parameters
     ----------
     :type input_num: int
@@ -65,18 +74,9 @@ class SOSxNN(BaseNet):
     :type  random_state: int
     :param random_state: optional, default=0, the random seed.
 
-    SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
-    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
-    2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
-    3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
-    4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
-    5. We train the network and early stop if no improvement occurs in certain epochs.
-    6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
-    7. The pruned network will then be fine-tuned.
-
     References
     ----------
-    .. [1] Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of Neural Networks through Architecture Constraints." arXiv preprint arXiv:1901.03838 (2019).
+    .. Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of Neural Networks through Architecture Constraints." arXiv preprint arXiv:1901.03838 (2019).
 
     """
 

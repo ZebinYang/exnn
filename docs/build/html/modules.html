@@ -155,6 +155,12 @@
 <dt id="xnn.xNN">
 <em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">xNN</code><span class="sig-paren">(</span><em>input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/xnn.html#xNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.xNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explainable neural network (xNN).</p>
+<p>xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
+1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.
+3. We train the network and early stop if no improvement occurs in certain epochs.
+4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+5. The pruned network will then be fine-tuned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -193,25 +199,20 @@ The architecture of each subnetworks, the ith element represents the number of n
 </ul>
 </dd>
 </dl>
-<p>xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
-1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
-2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.
-3. We train the network and early stop if no improvement occurs in certain epochs.
-4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
-5. The pruned network will then be fine-tuned.</p>
-<dl class="footnote brackets">
-<dt class="label" id="id1"><span class="brackets">1</span></dt>
-<dd><ol class="upperalpha simple" start="10">
-<li><p>Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, “Explainable neural networks based on additive index models,” The RMA Journal, pp. 40-49, October 2018.</p></li>
-</ol>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="class">
 <dt id="xnn.SOSxNN">
 <em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">SOSxNN</code><span class="sig-paren">(</span><em>input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/sosxnn.html#SOSxNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.SOSxNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sparse, orthogonal and smooth explainable neural network (SOSxNN).</p>
+<p>SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
+1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
+3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
+4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
+5. We train the network and early stop if no improvement occurs in certain epochs.
+6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+7. The pruned network will then be fine-tuned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -235,19 +236,6 @@ The architecture of each subnetworks, the ith element represents the number of n
 <li><p><strong>early_stop_thres</strong> (<em>int</em>) – optional, default=1000. Maximum number of epochs if no improvement occurs.</p></li>
 <li><p><strong>random_state</strong> (<em>int</em>) – optional, default=0, the random seed.</p></li>
 </ul>
-</dd>
-</dl>
-<p>SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
-1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
-2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
-3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
-4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
-5. We train the network and early stop if no improvement occurs in certain epochs.
-6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
-7. The pruned network will then be fine-tuned.</p>
-<dl class="footnote brackets">
-<dt class="label" id="id2"><span class="brackets">1</span></dt>
-<dd><p>Yang, Zebin, Aijun Zhang, and Agus Sudjianto. “Enhancing Explainability of Neural Networks through Architecture Constraints.” arXiv preprint arXiv:1901.03838 (2019).</p>
 </dd>
 </dl>
 </dd></dl>

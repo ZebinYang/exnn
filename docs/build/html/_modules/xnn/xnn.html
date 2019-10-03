@@ -153,6 +153,13 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Explainable neural network (xNN).</span>
 
+<span class="sd">    xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:</span>
+<span class="sd">    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.</span>
+<span class="sd">    2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.</span>
+<span class="sd">    3. We train the network and early stop if no improvement occurs in certain epochs.</span>
+<span class="sd">    4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.</span>
+<span class="sd">    5. The pruned network will then be fine-tuned.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    :type input_num: int</span>
@@ -207,18 +214,9 @@
 <span class="sd">    :type  random_state: int</span>
 <span class="sd">    :param random_state: optional, default=0, the random seed.</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:</span>
-<span class="sd">    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.</span>
-<span class="sd">    2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.</span>
-<span class="sd">    3. We train the network and early stop if no improvement occurs in certain epochs.</span>
-<span class="sd">    4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.</span>
-<span class="sd">    5. The pruned network will then be fine-tuned.</span>
-
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] J. Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, &quot;Explainable neural networks based on additive index models,&quot; The RMA Journal, pp. 40-49, October 2018.</span>
+<span class="sd">    .. J. Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, &quot;Explainable neural networks based on additive index models,&quot; The RMA Journal, pp. 40-49, October 2018.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
