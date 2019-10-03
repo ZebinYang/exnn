@@ -161,7 +161,7 @@
 <span class="sd">    :type subnet_num: int</span>
 <span class="sd">    :param subnet_num: the number of subnetworks.</span>
 
-<span class="sd">    :type  meta_info, : dict</span>
+<span class="sd">    :type  meta_info: dict</span>
 <span class="sd">    :param meta_info: the meta information of the dataset.</span>
 
 <span class="sd">    :type  subnet_arch: list</span>
@@ -203,8 +203,8 @@
 <span class="sd">    :type  verbose: bool</span>
 <span class="sd">    :param verbose: optional, default=False. If True, detailed messages will be printed.</span>
 
-<span class="sd">    :type  val_ratio : float</span>
-<span class="sd">    :param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</span>
+<span class="sd">    :type  val_ratio: float</span>
+<span class="sd">    :param val_ratio: optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</span>
 
 <span class="sd">    :type  early_stop_thres: int</span>
 <span class="sd">    :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.</span>
@@ -212,8 +212,6 @@
 <span class="sd">    :type  random_state: int</span>
 <span class="sd">    :param random_state: optional, default=0, the random seed.</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
 <span class="sd">    SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:</span>
 <span class="sd">    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.</span>
 <span class="sd">    2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.</span>
@@ -225,9 +223,8 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Yang, Zebin, Aijun Zhang, and Agus Sudjianto. &quot;Enhancing Explainability of</span>
-<span class="sd">    Neural Networks through Architecture Constraints.&quot;</span>
-<span class="sd">    arXiv preprint arXiv:1901.03838 (2019).</span>
+<span class="sd">    .. [1] Yang, Zebin, Aijun Zhang, and Agus Sudjianto. &quot;Enhancing Explainability of Neural Networks through Architecture Constraints.&quot; arXiv preprint arXiv:1901.03838 (2019).</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_num</span><span class="p">,</span> <span class="n">subnet_num</span><span class="p">,</span> <span class="n">meta_info</span><span class="p">,</span> <span class="n">subnet_arch</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;Regression&quot;</span><span class="p">,</span>
