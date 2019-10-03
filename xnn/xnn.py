@@ -120,6 +120,10 @@ class xNN(BaseNet):
             pred_loss = self.loss_fn(labels, pred)
             total_loss = pred_loss
 
-        variables = list(set(self.trainable_weights).difference(set(self.proj_layer.weights)))
-        grads = tape.gradient(total_loss, variables)
-        self.optimizer.apply_gradients(zip(grads, variables))
+        train_weights_list = []
+        trainable_weights_names = [self.trainable_weights[j].name for j in range(len(self.trainable_weights))]
+        for i in range(len(self.trainable_weights)):
+            if train_weights[i].name != self.proj_layer.weights[0].name:
+                train_weights_list.append(train_weights[i])
+        grads = tape.gradient(total_loss, train_weights_list)
+        self.optimizer.apply_gradients(zip(grads, train_weights_list))

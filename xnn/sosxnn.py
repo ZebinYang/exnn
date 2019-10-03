@@ -120,8 +120,14 @@ class SOSxNN(BaseNet):
                     smoothness_loss = self.subnet_blocks.smooth_loss
                     bp_loss += smoothness_loss
 
+        train_weights_list = []
+        trainable_weights_names = [self.trainable_weights[j].name for j in range(len(self.trainable_weights))]
+        for i in range(len(self.trainable_weights)):
+            if train_weights[i].name != self.proj_layer.weights[0].name:
+                train_weights_list.append(train_weights[i])
+
         grad_proj = tape_cl.gradient(cl_loss, self.proj_layer.weights)
-        grad_nets = tape_bp.gradient(bp_loss, list(set(self.trainable_weights).difference(set(self.proj_layer.weights))))
+        grad_nets = tape_bp.gradient(bp_loss, train_weights_list)
 
         in_shape = self.proj_layer.weights[0].shape[0]
         matrix_a = (tf.matmul(grad_proj[0], tf.transpose(self.proj_layer.weights[0]))
@@ -129,7 +135,7 @@ class SOSxNN(BaseNet):
         matrix_q = tf.matmul(tf.linalg.inv(tf.eye(in_shape) + tf.multiply(self.lr_cl / 2, matrix_a)),
                              (tf.eye(in_shape) - tf.multiply(self.lr_cl / 2, matrix_a)))
         self.proj_layer.weights[0].assign(tf.matmul(matrix_q, self.proj_layer.weights[0]))
-        self.optimizer.apply_gradients(zip(grad_nets, list(set(self.trainable_weights).difference(set(self.proj_layer.weights)))))
+        self.optimizer.apply_gradients(zip(grad_nets, train_weights_list))
 
     @tf.function
     def train_step_finetune(self, inputs, labels):
@@ -142,6 +148,10 @@ class SOSxNN(BaseNet):
                 smoothness_loss = self.subnet_blocks.smooth_loss
                 total_loss += smoothness_loss
 
-        variables = list(set(self.trainable_weights).difference(set(self.proj_layer.weights)))
-        grads = tape.gradient(total_loss, variables)
-        self.optimizer.apply_gradients(zip(grads, variables))
+        train_weights_list = []
+        trainable_weights_names = [self.trainable_weights[j].name for j in range(len(self.trainable_weights))]
+        for i in range(len(self.trainable_weights)):
+            if train_weights[i].name != self.proj_layer.weights[0].name:
+                train_weights_list.append(train_weights[i])
+        grads = tape.gradient(total_loss, train_weights_list)
+        self.optimizer.apply_gradients(zip(grads, train_weights_list))
