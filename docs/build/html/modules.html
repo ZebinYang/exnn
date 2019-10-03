@@ -155,25 +155,20 @@
 <dt id="xnn.xNN">
 <em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">xNN</code><span class="sig-paren">(</span><em>input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/xnn.html#xNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.xNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explainable neural network (xNN).</p>
-<p>xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
-1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
-2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.
-3. We train the network and early stop if no improvement occurs in certain epochs.
-4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
-5. The pruned network will then be fine-tuned.</p>
+<p>xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:</p>
+<ol class="arabic simple">
+<li><p>Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.</p></li>
+<li><p>The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.</p></li>
+<li><p>We train the network and early stop if no improvement occurs in certain epochs.</p></li>
+<li><p>The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.</p></li>
+<li><p>The pruned network will then be fine-tuned.</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_num</strong> (<em>int</em>) – the length of input variables, excluding multi-class categorical variables.</p></li>
 <li><p><strong>subnet_num</strong> (<em>int</em>) – the number of subnetworks.</p></li>
-</ul>
-</dd>
-</dl>
-<p>:type  meta_info, : dict
-:param meta_info: the meta information of the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta_info</strong> (<em>dict</em>) – the meta information of the dataset.</p></li>
 <li><p><strong>subnet_arch</strong> (<em>list</em>) – optional, default=(10, 6).
 The architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.</p></li>
 <li><p><strong>task_type</strong> (<em>string</em>) – optional, one of {“Regression”, “Classification”}, default=”Regression”. Only support binary classification at current version.</p></li>
@@ -186,14 +181,7 @@ The architecture of each subnetworks, the ith element represents the number of n
 <li><p><strong>l1_proj</strong> (<em>float</em>) – optional, default=0.001, the strength of L1 penalty for projection layer.</p></li>
 <li><p><strong>l1_subnet</strong> (<em>float</em>) – optional, default=0.001, the strength of L1 penalty for scaling layer.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – optional, default=False. If True, detailed messages will be printed.</p></li>
-</ul>
-</dd>
-</dl>
-<p>:type  val_ratio : float
-:param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
+<li><p><strong>val_ratio</strong> (<em>float</em>) – optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p></li>
 <li><p><strong>early_stop_thres</strong> (<em>int</em>) – optional, default=1000. Maximum number of epochs if no improvement occurs.</p></li>
 <li><p><strong>random_state</strong> (<em>int</em>) – optional, default=0, the random seed.</p></li>
 </ul>
@@ -205,14 +193,16 @@ The architecture of each subnetworks, the ith element represents the number of n
 <dt id="xnn.SOSxNN">
 <em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">SOSxNN</code><span class="sig-paren">(</span><em>input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/sosxnn.html#SOSxNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.SOSxNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sparse, orthogonal and smooth explainable neural network (SOSxNN).</p>
-<p>SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
-1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
-2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
-3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
-4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
-5. We train the network and early stop if no improvement occurs in certain epochs.
-6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
-7. The pruned network will then be fine-tuned.</p>
+<p>SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:</p>
+<ol class="arabic simple">
+<li><p>Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.</p></li>
+<li><p>The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.</p></li>
+<li><p>A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.</p></li>
+<li><p>The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.</p></li>
+<li><p>We train the network and early stop if no improvement occurs in certain epochs.</p></li>
+<li><p>The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.</p></li>
+<li><p>The pruned network will then be fine-tuned.</p></li>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

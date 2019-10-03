@@ -7,10 +7,15 @@ class xNN(BaseNet):
     Explainable neural network (xNN).
 
     xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
+
     1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+
     2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.
+
     3. We train the network and early stop if no improvement occurs in certain epochs.
+
     4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+
     5. The pruned network will then be fine-tuned.
 
     Parameters
@@ -21,7 +26,7 @@ class xNN(BaseNet):
     :type subnet_num: int
     :param subnet_num: the number of subnetworks.
 
-    :type  meta_info, : dict
+    :type  meta_info: dict
     :param meta_info: the meta information of the dataset.
 
     :type  subnet_arch: list
@@ -58,8 +63,8 @@ class xNN(BaseNet):
     :type  verbose: bool
     :param verbose: optional, default=False. If True, detailed messages will be printed.
 
-    :type  val_ratio : float
-    :param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
+    :type  val_ratio: float
+    :param val_ratio: optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
 
     :type  early_stop_thres: int
     :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.
