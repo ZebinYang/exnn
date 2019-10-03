@@ -11,7 +11,7 @@ class GAMNet(BaseNet):
     :type input_num: int
     :param input_num: the length of input variables, excluding multi-class categorical variables.
 
-    :type  meta_info, : dict
+    :type  meta_info: dict
     :param meta_info: the meta information of the dataset.
 
     :type  subnet_arch: list
@@ -50,9 +50,8 @@ class GAMNet(BaseNet):
     :type  verbose: bool
     :param verbose: optional, default=False. If True, detailed messages will be printed.
 
-    :type  val_ratio : float
-    :param val_ratio : optional, default=0.2.
-        The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
+    :type  val_ratio: float
+    :param val_ratio: optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
 
     :type  early_stop_thres: int
     :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.

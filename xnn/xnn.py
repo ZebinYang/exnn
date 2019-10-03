@@ -63,19 +63,16 @@ class xNN(BaseNet):
     Notes
     -----
     xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
-    1. Categorical variables should be first converted by one-hot encoding, and we directly link each
-      of the dummy variables as a bias term to final output.
-    2. The projection layer weights are initialized with univariate coefficient or combination of coefficients,
-      considering the number of subnetworks. See the projection_layer function for details.
+    1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+    2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.
     3. We train the network and early stop if no improvement occurs in certain epochs.
     4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
     5. The pruned network will then be fine-tuned.
 
     References
     ----------
-    J. Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, "Explainable
-    neural networks based on additive index models," The RMA
-    Journal, pp. 40-49, October 2018.
+    .. [1] J. Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, "Explainable neural networks based on additive index models," The RMA Journal, pp. 40-49, October 2018.
+
     """
 
     def __init__(self, input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type="Regression",

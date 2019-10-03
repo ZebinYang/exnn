@@ -14,7 +14,7 @@ class SOSxNN(BaseNet):
     :type subnet_num: int
     :param subnet_num: the number of subnetworks.
 
-    :type  meta_info, : dict
+    :type  meta_info: dict
     :param meta_info: the meta information of the dataset.
 
     :type  subnet_arch: list
@@ -56,8 +56,8 @@ class SOSxNN(BaseNet):
     :type  verbose: bool
     :param verbose: optional, default=False. If True, detailed messages will be printed.
 
-    :type  val_ratio : float
-    :param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
+    :type  val_ratio: float
+    :param val_ratio: optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.
 
     :type  early_stop_thres: int
     :param early_stop_thres: optional, default=1000. Maximum number of epochs if no improvement occurs.
@@ -65,8 +65,6 @@ class SOSxNN(BaseNet):
     :type  random_state: int
     :param random_state: optional, default=0, the random seed.
 
-    Notes
-    -----
     SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
     1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
     2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
@@ -78,9 +76,8 @@ class SOSxNN(BaseNet):
 
     References
     ----------
-    Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of
-    Neural Networks through Architecture Constraints."
-    arXiv preprint arXiv:1901.03838 (2019).
+    .. [1] Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of Neural Networks through Architecture Constraints." arXiv preprint arXiv:1901.03838 (2019).
+
     """
 
     def __init__(self, input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type="Regression",

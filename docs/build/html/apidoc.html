@@ -1,0 +1,1351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>xNN &mdash; sosxnn  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sosxnn
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">xNN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-xnn.GAMNet">xnn.GAMNet</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-xnn.xNN">xnn.xNN</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-xnn.SOSxNN">xnn.SOSxNN</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sosxnn</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Modules</a> &raquo;</li>
+        
+      <li>xNN</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/ZebinYang/sosxnn/blob/master/docs/source/apidoc.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="xnn">
+<h1>xNN<a class="headerlink" href="#xnn" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-xnn.GAMNet">
+<span id="xnn-gamnet"></span><h2>xnn.GAMNet<a class="headerlink" href="#module-xnn.GAMNet" title="Permalink to this headline">¶</a></h2>
+<p>Generalized additive model vai neural network implementation. It is just a simplified version of sosxnn with identity projection layer.</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">type input_num</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param input_num</dt>
+<dd class="field-even"><p>the length of input variables, excluding multi-class categorical variables.</p>
+</dd>
+</dl>
+<p>:type  meta_info, : dict
+:param meta_info: the meta information of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type  subnet_arch</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">param subnet_arch</dt>
+<dd class="field-even"><p>optional, default=(10, 6).
+The architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.</p>
+</dd>
+<dt class="field-odd">type  task_type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+<dt class="field-even">param task_type</dt>
+<dd class="field-even"><p>optional, one of {“Regression”, “Classification”}, default=”Regression”. Only support binary classification at current version.</p>
+</dd>
+<dt class="field-odd">type  batch_size</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param batch_size</dt>
+<dd class="field-even"><p>optional, default=1000, size of minibatches for stochastic optimizers.</p>
+</dd>
+<dt class="field-odd">type  training_epochs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param training_epochs</dt>
+<dd class="field-even"><p>optional, default=10000, maximum number of training epochs.</p>
+</dd>
+<dt class="field-odd">type  activation</dt>
+<dd class="field-odd"><p>tf object</p>
+</dd>
+<dt class="field-even">param activation</dt>
+<dd class="field-even"><p>optional, default=tf.tanh.
+Activation function for the hidden layer of subnetworks. It can be any tensorflow activation function object.</p>
+</dd>
+<dt class="field-odd">type  lr_bp</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param lr_bp</dt>
+<dd class="field-even"><p>optional, default=0.001, learning rate for weight updates.</p>
+</dd>
+<dt class="field-odd">type  beta_threshold</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param beta_threshold</dt>
+<dd class="field-even"><p>optional, default=0.01.
+Percentage threshold for pruning the subnetworks, which means the subnetworks that sum up to 95% of the total sclae will be kept.</p>
+</dd>
+<dt class="field-odd">type  tuning_epochs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param tuning_epochs</dt>
+<dd class="field-even"><p>optional, default=500, the number of tunning epochs.</p>
+</dd>
+<dt class="field-odd">type  l1_proj</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param l1_proj</dt>
+<dd class="field-even"><p>optional, default=0.001, the strength of L1 penalty for projection layer.</p>
+</dd>
+<dt class="field-odd">type  l1_subnet</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param l1_subnet</dt>
+<dd class="field-even"><p>optional, default=0.001, the strength of L1 penalty for scaling layer.</p>
+</dd>
+<dt class="field-odd">type  verbose</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">param verbose</dt>
+<dd class="field-even"><p>optional, default=False. If True, detailed messages will be printed.</p>
+</dd>
+</dl>
+<p>:type  val_ratio : float
+:param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type  early_stop_thres</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param early_stop_thres</dt>
+<dd class="field-even"><p>optional, default=1000. Maximum number of epochs if no improvement occurs.</p>
+</dd>
+<dt class="field-odd">type  random_state</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param random_state</dt>
+<dd class="field-even"><p>optional, default=0, the random seed.</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="xnn.GAMNet.activity_regularizer">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">activity_regularizer</code><a class="headerlink" href="#xnn.GAMNet.activity_regularizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional regularizer function for the output of this layer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.inbound_nodes">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">inbound_nodes</code><a class="headerlink" href="#xnn.GAMNet.inbound_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, do NOT use! Only for compatibility with external Keras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.input">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">input</code><a class="headerlink" href="#xnn.GAMNet.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one input,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input tensor or list of input tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RuntimeError: If called in Eager mode.
+AttributeError: If no inbound nodes are found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.input_mask">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">input_mask</code><a class="headerlink" href="#xnn.GAMNet.input_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input mask tensor (potentially None) or list of input
+mask tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer is connected to
+more than one incoming layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.input_shape">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">input_shape</code><a class="headerlink" href="#xnn.GAMNet.input_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input shape(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one input,
+i.e. if it is connected to one incoming layer, or if all inputs
+have the same shape.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input shape, as an integer shape tuple
+(or list of shape tuples, one tuple per input tensor).</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer has no defined input_shape.
+RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.input_spec">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">input_spec</code><a class="headerlink" href="#xnn.GAMNet.input_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the network’s input specs.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>A list of <cite>InputSpec</cite> instances (one per input to the model)</dt><dd><p>or a single instance if the model has only one input.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.losses">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">losses</code><a class="headerlink" href="#xnn.GAMNet.losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Losses which are associated with this <cite>Layer</cite>.</p>
+<p>Variable regularization tensors are created when this property is accessed,
+so it is eager safe: accessing <cite>losses</cite> under a <cite>tf.GradientTape</cite> will
+propagate gradients back to the corresponding variables.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.metrics">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">metrics</code><a class="headerlink" href="#xnn.GAMNet.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model’s metrics added using <cite>compile</cite>, <cite>add_metric</cite> APIs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.metrics_names">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">metrics_names</code><a class="headerlink" href="#xnn.GAMNet.metrics_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model’s display labels for all outputs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.name">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">name</code><a class="headerlink" href="#xnn.GAMNet.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of this module as passed or determined in the ctor.</p>
+<p>NOTE: This is not the same as the <cite>self.name_scope.name</cite> which includes
+parent module names.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.name_scope">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">name_scope</code><a class="headerlink" href="#xnn.GAMNet.name_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <cite>tf.name_scope</cite> instance for this class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.outbound_nodes">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">outbound_nodes</code><a class="headerlink" href="#xnn.GAMNet.outbound_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, do NOT use! Only for compatibility with external Keras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.output">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">output</code><a class="headerlink" href="#xnn.GAMNet.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one output,
+i.e. if it is connected to one incoming layer.</p>
+<dl>
+<dt>Returns:</dt><dd><p>Output tensor or list of output tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>AttributeError: if the layer is connected to more than one incoming</dt><dd><p>layers.</p>
+</dd>
+</dl>
+<p>RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.output_mask">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">output_mask</code><a class="headerlink" href="#xnn.GAMNet.output_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Output mask tensor (potentially None) or list of output
+mask tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer is connected to
+more than one incoming layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.output_shape">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">output_shape</code><a class="headerlink" href="#xnn.GAMNet.output_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output shape(s) of a layer.</p>
+<p>Only applicable if the layer has one output,
+or if all outputs have the same shape.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Output shape, as an integer shape tuple
+(or list of shape tuples, one tuple per output tensor).</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer has no defined output shape.
+RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.run_eagerly">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">run_eagerly</code><a class="headerlink" href="#xnn.GAMNet.run_eagerly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Settable attribute indicating whether the model should run eagerly.</p>
+<p>Running eagerly means that your model will be run step by step,
+like Python code. Your model might run slower, but it should become easier
+for you to debug it by stepping into individual layer calls.</p>
+<p>By default, we will attempt to compile your model to a static graph to
+deliver the best execution performance.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Boolean, whether the model should run eagerly.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.state_updates">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">state_updates</code><a class="headerlink" href="#xnn.GAMNet.state_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <cite>updates</cite> from all layers that are stateful.</p>
+<p>This is useful for separating training updates and
+state updates, e.g. when we need to update a layer’s internal state
+during prediction.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of update ops.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.submodules">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">submodules</code><a class="headerlink" href="#xnn.GAMNet.submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of all sub-modules.</p>
+<p>Submodules are modules which are properties of this module, or found as
+properties of modules which are properties of this module (and so on).</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">a</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">b</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">c</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">a.b</span> <span class="pre">=</span> <span class="pre">b</span>
+<span class="pre">b.c</span> <span class="pre">=</span> <span class="pre">c</span>
+<span class="pre">assert</span> <span class="pre">list(a.submodules)</span> <span class="pre">==</span> <span class="pre">[b,</span> <span class="pre">c]</span>
+<span class="pre">assert</span> <span class="pre">list(b.submodules)</span> <span class="pre">==</span> <span class="pre">[c]</span>
+<span class="pre">assert</span> <span class="pre">list(c.submodules)</span> <span class="pre">==</span> <span class="pre">[]</span>
+<span class="pre">`</span></code></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A sequence of all submodules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.trainable_variables">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">trainable_variables</code><a class="headerlink" href="#xnn.GAMNet.trainable_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of variables owned by this module and it’s submodules.</p>
+<p>Note: this method uses reflection to find variables on the current instance
+and submodules. For performance reasons you may wish to cache the result
+of calling this method if you don’t expect the return value to change.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A sequence of variables for the current module (sorted by attribute
+name) followed by variables from all submodules recursively (breadth
+first).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.variables">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">variables</code><a class="headerlink" href="#xnn.GAMNet.variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of all layer variables/weights.</p>
+<p>Alias of <cite>self.weights</cite>.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.GAMNet.weights">
+<code class="descclassname">xnn.GAMNet.</code><code class="descname">weights</code><a class="headerlink" href="#xnn.GAMNet.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of all layer variables/weights.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-xnn.xNN">
+<span id="xnn-xnn"></span><h2>xnn.xNN<a class="headerlink" href="#module-xnn.xNN" title="Permalink to this headline">¶</a></h2>
+<p>Explainable neural network (xNN).</p>
+<div class="section" id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">type input_num</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param input_num</dt>
+<dd class="field-even"><p>the length of input variables, excluding multi-class categorical variables.</p>
+</dd>
+<dt class="field-odd">type subnet_num</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param subnet_num</dt>
+<dd class="field-even"><p>the number of subnetworks.</p>
+</dd>
+</dl>
+<p>:type  meta_info, : dict
+:param meta_info: the meta information of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type  subnet_arch</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">param subnet_arch</dt>
+<dd class="field-even"><p>optional, default=(10, 6).
+The architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.</p>
+</dd>
+<dt class="field-odd">type  task_type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+<dt class="field-even">param task_type</dt>
+<dd class="field-even"><p>optional, one of {“Regression”, “Classification”}, default=”Regression”. Only support binary classification at current version.</p>
+</dd>
+<dt class="field-odd">type  batch_size</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param batch_size</dt>
+<dd class="field-even"><p>optional, default=1000, size of minibatches for stochastic optimizers.</p>
+</dd>
+<dt class="field-odd">type  training_epochs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param training_epochs</dt>
+<dd class="field-even"><p>optional, default=10000, maximum number of training epochs.</p>
+</dd>
+<dt class="field-odd">type  activation</dt>
+<dd class="field-odd"><p>tf object</p>
+</dd>
+<dt class="field-even">param activation</dt>
+<dd class="field-even"><p>optional, default=tf.tanh, activation function for the hidden layer of subnetworks. It can be any tensorflow activation function object.</p>
+</dd>
+<dt class="field-odd">type  lr_bp</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param lr_bp</dt>
+<dd class="field-even"><p>optional, default=0.001, learning rate for weight updates.</p>
+</dd>
+<dt class="field-odd">type  beta_threshold</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param beta_threshold</dt>
+<dd class="field-even"><p>optional, default=0.01, percentage threshold for pruning the subnetworks, which means the subnetworks that sum up to 95% of the total sclae will be kept.</p>
+</dd>
+<dt class="field-odd">type  tuning_epochs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param tuning_epochs</dt>
+<dd class="field-even"><p>optional, default=500, the number of tunning epochs.</p>
+</dd>
+<dt class="field-odd">type  l1_proj</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param l1_proj</dt>
+<dd class="field-even"><p>optional, default=0.001, the strength of L1 penalty for projection layer.</p>
+</dd>
+<dt class="field-odd">type  l1_subnet</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param l1_subnet</dt>
+<dd class="field-even"><p>optional, default=0.001, the strength of L1 penalty for scaling layer.</p>
+</dd>
+<dt class="field-odd">type  verbose</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">param verbose</dt>
+<dd class="field-even"><p>optional, default=False. If True, detailed messages will be printed.</p>
+</dd>
+</dl>
+<p>:type  val_ratio : float
+:param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type  early_stop_thres</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param early_stop_thres</dt>
+<dd class="field-even"><p>optional, default=1000. Maximum number of epochs if no improvement occurs.</p>
+</dd>
+<dt class="field-odd">type  random_state</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param random_state</dt>
+<dd class="field-even"><p>optional, default=0, the random seed.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<p>xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:
+1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+2. The projection layer weights are initialized with univariate coefficient or combination of coefficients, considering the number of subnetworks. See the projection_layer function for details.
+3. We train the network and early stop if no improvement occurs in certain epochs.
+4. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+5. The pruned network will then be fine-tuned.</p>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<p>J. Vaughan, A. Sudjianto, E. Brahimi, J. Chen, and V. N. Nair, “Explainable
+neural networks based on additive index models,” The RMA
+Journal, pp. 40-49, October 2018.</p>
+<dl class="attribute">
+<dt id="xnn.xNN.activity_regularizer">
+<code class="descclassname">xnn.xNN.</code><code class="descname">activity_regularizer</code><a class="headerlink" href="#xnn.xNN.activity_regularizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional regularizer function for the output of this layer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.inbound_nodes">
+<code class="descclassname">xnn.xNN.</code><code class="descname">inbound_nodes</code><a class="headerlink" href="#xnn.xNN.inbound_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, do NOT use! Only for compatibility with external Keras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.input">
+<code class="descclassname">xnn.xNN.</code><code class="descname">input</code><a class="headerlink" href="#xnn.xNN.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one input,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input tensor or list of input tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RuntimeError: If called in Eager mode.
+AttributeError: If no inbound nodes are found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.input_mask">
+<code class="descclassname">xnn.xNN.</code><code class="descname">input_mask</code><a class="headerlink" href="#xnn.xNN.input_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input mask tensor (potentially None) or list of input
+mask tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer is connected to
+more than one incoming layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.input_shape">
+<code class="descclassname">xnn.xNN.</code><code class="descname">input_shape</code><a class="headerlink" href="#xnn.xNN.input_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input shape(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one input,
+i.e. if it is connected to one incoming layer, or if all inputs
+have the same shape.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input shape, as an integer shape tuple
+(or list of shape tuples, one tuple per input tensor).</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer has no defined input_shape.
+RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.input_spec">
+<code class="descclassname">xnn.xNN.</code><code class="descname">input_spec</code><a class="headerlink" href="#xnn.xNN.input_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the network’s input specs.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>A list of <cite>InputSpec</cite> instances (one per input to the model)</dt><dd><p>or a single instance if the model has only one input.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.losses">
+<code class="descclassname">xnn.xNN.</code><code class="descname">losses</code><a class="headerlink" href="#xnn.xNN.losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Losses which are associated with this <cite>Layer</cite>.</p>
+<p>Variable regularization tensors are created when this property is accessed,
+so it is eager safe: accessing <cite>losses</cite> under a <cite>tf.GradientTape</cite> will
+propagate gradients back to the corresponding variables.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.metrics">
+<code class="descclassname">xnn.xNN.</code><code class="descname">metrics</code><a class="headerlink" href="#xnn.xNN.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model’s metrics added using <cite>compile</cite>, <cite>add_metric</cite> APIs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.metrics_names">
+<code class="descclassname">xnn.xNN.</code><code class="descname">metrics_names</code><a class="headerlink" href="#xnn.xNN.metrics_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model’s display labels for all outputs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.name">
+<code class="descclassname">xnn.xNN.</code><code class="descname">name</code><a class="headerlink" href="#xnn.xNN.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of this module as passed or determined in the ctor.</p>
+<p>NOTE: This is not the same as the <cite>self.name_scope.name</cite> which includes
+parent module names.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.name_scope">
+<code class="descclassname">xnn.xNN.</code><code class="descname">name_scope</code><a class="headerlink" href="#xnn.xNN.name_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <cite>tf.name_scope</cite> instance for this class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.outbound_nodes">
+<code class="descclassname">xnn.xNN.</code><code class="descname">outbound_nodes</code><a class="headerlink" href="#xnn.xNN.outbound_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, do NOT use! Only for compatibility with external Keras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.output">
+<code class="descclassname">xnn.xNN.</code><code class="descname">output</code><a class="headerlink" href="#xnn.xNN.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one output,
+i.e. if it is connected to one incoming layer.</p>
+<dl>
+<dt>Returns:</dt><dd><p>Output tensor or list of output tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>AttributeError: if the layer is connected to more than one incoming</dt><dd><p>layers.</p>
+</dd>
+</dl>
+<p>RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.output_mask">
+<code class="descclassname">xnn.xNN.</code><code class="descname">output_mask</code><a class="headerlink" href="#xnn.xNN.output_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Output mask tensor (potentially None) or list of output
+mask tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer is connected to
+more than one incoming layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.output_shape">
+<code class="descclassname">xnn.xNN.</code><code class="descname">output_shape</code><a class="headerlink" href="#xnn.xNN.output_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output shape(s) of a layer.</p>
+<p>Only applicable if the layer has one output,
+or if all outputs have the same shape.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Output shape, as an integer shape tuple
+(or list of shape tuples, one tuple per output tensor).</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer has no defined output shape.
+RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.run_eagerly">
+<code class="descclassname">xnn.xNN.</code><code class="descname">run_eagerly</code><a class="headerlink" href="#xnn.xNN.run_eagerly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Settable attribute indicating whether the model should run eagerly.</p>
+<p>Running eagerly means that your model will be run step by step,
+like Python code. Your model might run slower, but it should become easier
+for you to debug it by stepping into individual layer calls.</p>
+<p>By default, we will attempt to compile your model to a static graph to
+deliver the best execution performance.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Boolean, whether the model should run eagerly.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.state_updates">
+<code class="descclassname">xnn.xNN.</code><code class="descname">state_updates</code><a class="headerlink" href="#xnn.xNN.state_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <cite>updates</cite> from all layers that are stateful.</p>
+<p>This is useful for separating training updates and
+state updates, e.g. when we need to update a layer’s internal state
+during prediction.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of update ops.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.submodules">
+<code class="descclassname">xnn.xNN.</code><code class="descname">submodules</code><a class="headerlink" href="#xnn.xNN.submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of all sub-modules.</p>
+<p>Submodules are modules which are properties of this module, or found as
+properties of modules which are properties of this module (and so on).</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">a</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">b</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">c</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">a.b</span> <span class="pre">=</span> <span class="pre">b</span>
+<span class="pre">b.c</span> <span class="pre">=</span> <span class="pre">c</span>
+<span class="pre">assert</span> <span class="pre">list(a.submodules)</span> <span class="pre">==</span> <span class="pre">[b,</span> <span class="pre">c]</span>
+<span class="pre">assert</span> <span class="pre">list(b.submodules)</span> <span class="pre">==</span> <span class="pre">[c]</span>
+<span class="pre">assert</span> <span class="pre">list(c.submodules)</span> <span class="pre">==</span> <span class="pre">[]</span>
+<span class="pre">`</span></code></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A sequence of all submodules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.trainable_variables">
+<code class="descclassname">xnn.xNN.</code><code class="descname">trainable_variables</code><a class="headerlink" href="#xnn.xNN.trainable_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of variables owned by this module and it’s submodules.</p>
+<p>Note: this method uses reflection to find variables on the current instance
+and submodules. For performance reasons you may wish to cache the result
+of calling this method if you don’t expect the return value to change.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A sequence of variables for the current module (sorted by attribute
+name) followed by variables from all submodules recursively (breadth
+first).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.variables">
+<code class="descclassname">xnn.xNN.</code><code class="descname">variables</code><a class="headerlink" href="#xnn.xNN.variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of all layer variables/weights.</p>
+<p>Alias of <cite>self.weights</cite>.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.xNN.weights">
+<code class="descclassname">xnn.xNN.</code><code class="descname">weights</code><a class="headerlink" href="#xnn.xNN.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of all layer variables/weights.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-xnn.SOSxNN">
+<span id="xnn-sosxnn"></span><h2>xnn.SOSxNN<a class="headerlink" href="#module-xnn.SOSxNN" title="Permalink to this headline">¶</a></h2>
+<p>Sparse, orthogonal and smooth explainable neural network (SOSxNN).</p>
+<div class="section" id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">type input_num</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param input_num</dt>
+<dd class="field-even"><p>the length of input variables excluding multi-class categorical variables.</p>
+</dd>
+<dt class="field-odd">type subnet_num</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param subnet_num</dt>
+<dd class="field-even"><p>the number of subnetworks.</p>
+</dd>
+</dl>
+<p>:type  meta_info, : dict
+:param meta_info: the meta information of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type  subnet_arch</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">param subnet_arch</dt>
+<dd class="field-even"><p>optional, default=(10, 6), the architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.</p>
+</dd>
+<dt class="field-odd">type  task_type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+<dt class="field-even">param task_type</dt>
+<dd class="field-even"><p>optional, one of {“Regression”, “Classification”}, default=”Regression”. Only support binary classification at current version.</p>
+</dd>
+<dt class="field-odd">type  batch_size</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param batch_size</dt>
+<dd class="field-even"><p>optional, default=1000, size of minibatches for stochastic optimizers.</p>
+</dd>
+<dt class="field-odd">type  training_epochs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param training_epochs</dt>
+<dd class="field-even"><p>optional, default=10000, maximum number of training epochs.</p>
+</dd>
+<dt class="field-odd">type  activation</dt>
+<dd class="field-odd"><p>tf object</p>
+</dd>
+<dt class="field-even">param activation</dt>
+<dd class="field-even"><p>optional, default=tf.tanh, activation function for the hidden layer of subnetworks. It can be any tensorflow activation function object.</p>
+</dd>
+<dt class="field-odd">type  lr_bp</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param lr_bp</dt>
+<dd class="field-even"><p>optional, default=0.001, learning rate for weight updates.</p>
+</dd>
+<dt class="field-odd">type  lr_cl</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param lr_cl</dt>
+<dd class="field-even"><p>optional, default=0.1, learning rate of Cayley Transform for updating the projection layer.</p>
+</dd>
+<dt class="field-odd">type  beta_threshold</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param beta_threshold</dt>
+<dd class="field-even"><p>optional, default=0.05, percentage threshold for pruning the subnetworks, which means the subnetworks that sum up to 95% of the total sclae will be kept.</p>
+</dd>
+<dt class="field-odd">type  tuning_epochs</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param tuning_epochs</dt>
+<dd class="field-even"><p>optional, default=500, the number of tunning epochs.</p>
+</dd>
+<dt class="field-odd">type  l1_proj</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param l1_proj</dt>
+<dd class="field-even"><p>optional, default=0.001, the strength of L1 penalty for projection layer.</p>
+</dd>
+<dt class="field-odd">type  l1_subnet</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param l1_subnet</dt>
+<dd class="field-even"><p>optional, default=0.001, the strength of L1 penalty for scaling layer.</p>
+</dd>
+<dt class="field-odd">type  smooth_lambda</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">param smooth_lambda</dt>
+<dd class="field-even"><p>optional, default=0.000001, the strength of roughness penalty for subnetworks.</p>
+</dd>
+<dt class="field-odd">type  verbose</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">param verbose</dt>
+<dd class="field-even"><p>optional, default=False. If True, detailed messages will be printed.</p>
+</dd>
+</dl>
+<p>:type  val_ratio : float
+:param val_ratio : optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type  early_stop_thres</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param early_stop_thres</dt>
+<dd class="field-even"><p>optional, default=1000. Maximum number of epochs if no improvement occurs.</p>
+</dd>
+<dt class="field-odd">type  random_state</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">param random_state</dt>
+<dd class="field-even"><p>optional, default=0, the random seed.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id3">
+<h3>Notes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:
+1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
+2. The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.
+3. A normalization procedure is implemented for each of the subnetwork outputs, for identifiability considerations and improving the performance of L1 sparsity constraint on the scaling layer.
+4. The roughness penalty for subnetworks are implemented via calculating the 2-order gradients from the output to the input of each subnetwork.
+5. We train the network and early stop if no improvement occurs in certain epochs.
+6. The subnetworks whose scaling factors are close to zero are pruned for parsimony consideration.
+7. The pruned network will then be fine-tuned.</p>
+</div>
+<div class="section" id="id4">
+<h3>References<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Yang, Zebin, Aijun Zhang, and Agus Sudjianto. “Enhancing Explainability of
+Neural Networks through Architecture Constraints.”
+arXiv preprint arXiv:1901.03838 (2019).</p>
+<dl class="attribute">
+<dt id="xnn.SOSxNN.activity_regularizer">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">activity_regularizer</code><a class="headerlink" href="#xnn.SOSxNN.activity_regularizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional regularizer function for the output of this layer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.inbound_nodes">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">inbound_nodes</code><a class="headerlink" href="#xnn.SOSxNN.inbound_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, do NOT use! Only for compatibility with external Keras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.input">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">input</code><a class="headerlink" href="#xnn.SOSxNN.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one input,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input tensor or list of input tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RuntimeError: If called in Eager mode.
+AttributeError: If no inbound nodes are found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.input_mask">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">input_mask</code><a class="headerlink" href="#xnn.SOSxNN.input_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input mask tensor (potentially None) or list of input
+mask tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer is connected to
+more than one incoming layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.input_shape">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">input_shape</code><a class="headerlink" href="#xnn.SOSxNN.input_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the input shape(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one input,
+i.e. if it is connected to one incoming layer, or if all inputs
+have the same shape.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Input shape, as an integer shape tuple
+(or list of shape tuples, one tuple per input tensor).</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer has no defined input_shape.
+RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.input_spec">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">input_spec</code><a class="headerlink" href="#xnn.SOSxNN.input_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the network’s input specs.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>A list of <cite>InputSpec</cite> instances (one per input to the model)</dt><dd><p>or a single instance if the model has only one input.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.losses">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">losses</code><a class="headerlink" href="#xnn.SOSxNN.losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Losses which are associated with this <cite>Layer</cite>.</p>
+<p>Variable regularization tensors are created when this property is accessed,
+so it is eager safe: accessing <cite>losses</cite> under a <cite>tf.GradientTape</cite> will
+propagate gradients back to the corresponding variables.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.metrics">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">metrics</code><a class="headerlink" href="#xnn.SOSxNN.metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model’s metrics added using <cite>compile</cite>, <cite>add_metric</cite> APIs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.metrics_names">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">metrics_names</code><a class="headerlink" href="#xnn.SOSxNN.metrics_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model’s display labels for all outputs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.name">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">name</code><a class="headerlink" href="#xnn.SOSxNN.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of this module as passed or determined in the ctor.</p>
+<p>NOTE: This is not the same as the <cite>self.name_scope.name</cite> which includes
+parent module names.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.name_scope">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">name_scope</code><a class="headerlink" href="#xnn.SOSxNN.name_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <cite>tf.name_scope</cite> instance for this class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.outbound_nodes">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">outbound_nodes</code><a class="headerlink" href="#xnn.SOSxNN.outbound_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated, do NOT use! Only for compatibility with external Keras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.output">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">output</code><a class="headerlink" href="#xnn.SOSxNN.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one output,
+i.e. if it is connected to one incoming layer.</p>
+<dl>
+<dt>Returns:</dt><dd><p>Output tensor or list of output tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>AttributeError: if the layer is connected to more than one incoming</dt><dd><p>layers.</p>
+</dd>
+</dl>
+<p>RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.output_mask">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">output_mask</code><a class="headerlink" href="#xnn.SOSxNN.output_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node,
+i.e. if it is connected to one incoming layer.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Output mask tensor (potentially None) or list of output
+mask tensors.</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer is connected to
+more than one incoming layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.output_shape">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">output_shape</code><a class="headerlink" href="#xnn.SOSxNN.output_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the output shape(s) of a layer.</p>
+<p>Only applicable if the layer has one output,
+or if all outputs have the same shape.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Output shape, as an integer shape tuple
+(or list of shape tuples, one tuple per output tensor).</p>
+</dd>
+<dt>Raises:</dt><dd><p>AttributeError: if the layer has no defined output shape.
+RuntimeError: if called in Eager mode.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.run_eagerly">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">run_eagerly</code><a class="headerlink" href="#xnn.SOSxNN.run_eagerly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Settable attribute indicating whether the model should run eagerly.</p>
+<p>Running eagerly means that your model will be run step by step,
+like Python code. Your model might run slower, but it should become easier
+for you to debug it by stepping into individual layer calls.</p>
+<p>By default, we will attempt to compile your model to a static graph to
+deliver the best execution performance.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Boolean, whether the model should run eagerly.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.state_updates">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">state_updates</code><a class="headerlink" href="#xnn.SOSxNN.state_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <cite>updates</cite> from all layers that are stateful.</p>
+<p>This is useful for separating training updates and
+state updates, e.g. when we need to update a layer’s internal state
+during prediction.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of update ops.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.submodules">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">submodules</code><a class="headerlink" href="#xnn.SOSxNN.submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of all sub-modules.</p>
+<p>Submodules are modules which are properties of this module, or found as
+properties of modules which are properties of this module (and so on).</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">a</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">b</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">c</span> <span class="pre">=</span> <span class="pre">tf.Module()</span>
+<span class="pre">a.b</span> <span class="pre">=</span> <span class="pre">b</span>
+<span class="pre">b.c</span> <span class="pre">=</span> <span class="pre">c</span>
+<span class="pre">assert</span> <span class="pre">list(a.submodules)</span> <span class="pre">==</span> <span class="pre">[b,</span> <span class="pre">c]</span>
+<span class="pre">assert</span> <span class="pre">list(b.submodules)</span> <span class="pre">==</span> <span class="pre">[c]</span>
+<span class="pre">assert</span> <span class="pre">list(c.submodules)</span> <span class="pre">==</span> <span class="pre">[]</span>
+<span class="pre">`</span></code></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A sequence of all submodules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.trainable_variables">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">trainable_variables</code><a class="headerlink" href="#xnn.SOSxNN.trainable_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence of variables owned by this module and it’s submodules.</p>
+<p>Note: this method uses reflection to find variables on the current instance
+and submodules. For performance reasons you may wish to cache the result
+of calling this method if you don’t expect the return value to change.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A sequence of variables for the current module (sorted by attribute
+name) followed by variables from all submodules recursively (breadth
+first).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.variables">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">variables</code><a class="headerlink" href="#xnn.SOSxNN.variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of all layer variables/weights.</p>
+<p>Alias of <cite>self.weights</cite>.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xnn.SOSxNN.weights">
+<code class="descclassname">xnn.SOSxNN.</code><code class="descname">weights</code><a class="headerlink" href="#xnn.SOSxNN.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of all layer variables/weights.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>A list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Zebin Yang and Aijun Zhang
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
