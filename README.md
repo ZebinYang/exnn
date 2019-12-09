@@ -1,17 +1,44 @@
-# Explainable-Neural-Networks
+# Enhanced Explainable-Neural-Networks
 
 ## Installation 
+
+### Prerequisite
+
+The following environments are required for pyunidoe package:
+
+- Python 3.7 (anaconda is preferable)
+- tensorflow 2.0
+
+
+### Github Installation
+
+You can install the package by the following console command:
+
 ```shell
-pip install git+https://github.com/zebinyang/sosxnn.git
+pip install git+https://github.com/zebinyang/exnn.git
+```
+        
+### Manual Installation
+
+If git is not available, you can manually install the package by downloading the source codes and then compiling it by hand:
+
+- Download the source codes from https://github.com/ZebinYang/exnn.git.
+
+- unzip and switch to the root folder.
+
+- Run the following shell commands to finish installation.
+
+```shell
+pip install -r requirements.txt
+python setup.py install
 ```
 
 
 ## Usage
-- xNN
 
 ```python
-from xnn import xNN
-from xnn import SOSxNN
+from exnn import xNN
+from exnn import ExNN
 
 def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
     
@@ -64,8 +91,7 @@ def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
     return train_x, test_x, train_y, test_y, task_type, meta_info
 
 train_x, test_x, train_y, test_y, task_type, meta_info = data_generator1(datanum=10000, testnum=10000, noise_sigma=1, rand_seed=0)```
-model = SOSxNN(input_num=train_x.shape[1],
-               meta_info=meta_info,
+model = ExNN(meta_info=meta_info,
                subnet_num=10,
                subnet_arch=[10, 6],
                task_type=task_type,

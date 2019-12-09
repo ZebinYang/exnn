@@ -20,9 +20,6 @@ class xNN(BaseNet):
 
     Parameters
     ----------
-    :type input_num: int
-    :param input_num: the length of input variables, excluding multi-class categorical variables.
-
     :type subnet_num: int
     :param subnet_num: the number of subnetworks.
 
@@ -78,31 +75,30 @@ class xNN(BaseNet):
 
     """
 
-    def __init__(self, input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type="Regression",
+    def __init__(self, subnet_num, meta_info, subnet_arch=[10, 6], task_type="Regression",
                  activation_func=tf.tanh, batch_size=1000, training_epochs=10000, lr_bp=0.001,
                  beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001,
                  verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0):
 
-        super(xNN, self).__init__(input_num=input_num,
-                                  meta_info=meta_info,
-                                  subnet_num=subnet_num,
-                                  subnet_arch=subnet_arch,
-                                  task_type=task_type,
-                                  proj_method="random",
-                                  activation_func=activation_func,
-                                  bn_flag=False,
-                                  lr_bp=lr_bp,
-                                  l1_proj=l1_proj,
-                                  l1_subnet=l1_subnet,
-                                  smooth_lambda=0,
-                                  batch_size=batch_size,
-                                  training_epochs=training_epochs,
-                                  tuning_epochs=tuning_epochs,
-                                  beta_threshold=beta_threshold,
-                                  verbose=verbose,
-                                  val_ratio=val_ratio,
-                                  early_stop_thres=early_stop_thres,
-                                  random_state=random_state)
+        super(xNN, self).__init__(meta_info=meta_info,
+                          subnet_num=subnet_num,
+                          subnet_arch=subnet_arch,
+                          task_type=task_type,
+                          proj_method="random",
+                          activation_func=activation_func,
+                          bn_flag=False,
+                          lr_bp=lr_bp,
+                          l1_proj=l1_proj,
+                          l1_subnet=l1_subnet,
+                          smooth_lambda=0,
+                          batch_size=batch_size,
+                          training_epochs=training_epochs,
+                          tuning_epochs=tuning_epochs,
+                          beta_threshold=beta_threshold,
+                          verbose=verbose,
+                          val_ratio=val_ratio,
+                          early_stop_thres=early_stop_thres,
+                          random_state=random_state)
 
     @tf.function
     def train_step_init(self, inputs, labels):

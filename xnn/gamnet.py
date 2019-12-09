@@ -8,9 +8,6 @@ class GAMNet(BaseNet):
 
     Parameters
     ----------
-    :type input_num: int
-    :param input_num: the length of input variables, excluding multi-class categorical variables.
-
     :type  meta_info: dict
     :param meta_info: the meta information of the dataset.
 
@@ -61,30 +58,29 @@ class GAMNet(BaseNet):
 
     """
 
-    def __init__(self, input_num, meta_info, subnet_arch=[10, 6], task_type="Regression",
+    def __init__(self, meta_info, subnet_arch=[10, 6], task_type="Regression",
                  activation_func=tf.tanh, batch_size=1000, training_epochs=10000, lr_bp=0.001,
                  beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=0.000001,
                  verbose=False, val_ratio=0.2, early_stop_thres=1000):
 
-        super(GAMNet, self).__init__(input_num=input_num,
-                                     meta_info=meta_info,
-                                     subnet_num=input_num,
-                                     subnet_arch=subnet_arch,
-                                     task_type=task_type,
-                                     proj_method="gam",
-                                     activation_func=activation_func,
-                                     bn_flag=True,
-                                     lr_bp=lr_bp,
-                                     l1_proj=0,
-                                     l1_subnet=l1_subnet,
-                                     smooth_lambda=smooth_lambda,
-                                     batch_size=batch_size,
-                                     training_epochs=training_epochs,
-                                     tuning_epochs=tuning_epochs,
-                                     beta_threshold=beta_threshold,
-                                     verbose=verbose,
-                                     val_ratio=val_ratio,
-                                     early_stop_thres=early_stop_thres)
+        super(GAMNet, self).__init__(meta_info=meta_info,
+                             subnet_num=len(meta_info) - 1,
+                             subnet_arch=subnet_arch,
+                             task_type=task_type,
+                             proj_method="gam",
+                             activation_func=activation_func,
+                             bn_flag=True,
+                             lr_bp=lr_bp,
+                             l1_proj=0,
+                             l1_subnet=l1_subnet,
+                             smooth_lambda=smooth_lambda,
+                             batch_size=batch_size,
+                             training_epochs=training_epochs,
+                             tuning_epochs=tuning_epochs,
+                             beta_threshold=beta_threshold,
+                             verbose=verbose,
+                             val_ratio=val_ratio,
+                             early_stop_thres=early_stop_thres)
 
     @tf.function
     def train_step_init(self, inputs, labels):

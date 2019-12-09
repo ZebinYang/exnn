@@ -14,8 +14,7 @@ class BaseNet(tf.keras.Model):
 
     """
 
-    def __init__(self, input_num,
-                 meta_info,
+    def __init__(self, meta_info,
                  subnet_num=10,
                  subnet_arch=[10, 6],
                  task_type="Regression",
@@ -38,7 +37,6 @@ class BaseNet(tf.keras.Model):
         super(BaseNet, self).__init__()
 
         # Parameter initiation
-        self.input_num = input_num
         self.meta_info = meta_info
         self.subnet_num = subnet_num
         self.subnet_arch = subnet_arch
