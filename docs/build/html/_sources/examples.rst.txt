@@ -10,7 +10,7 @@ GAMNet
 
         # Simulation
         import numpy as np
-        from xnn import GAMNet
+        from exnn import GAMNet
 
         def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
 
@@ -63,8 +63,7 @@ GAMNet
             return train_x, test_x, train_y, test_y, task_type, meta_info
 
         train_x, test_x, train_y, test_y, task_type, meta_info = data_generator1(datanum=10000, testnum=10000, noise_sigma=1, rand_seed=0)
-        model = GAMNet(input_num=train_x.shape[1],
-                       meta_info=meta_info,
+        model = GAMNet(meta_info=meta_info,
                        subnet_arch=[10, 6],
                        task_type=task_type,
                        activation_func=tf.tanh,
@@ -87,7 +86,7 @@ xNN
 
         # Simulation
         import numpy as np
-        from xnn import xNN
+        from exnn import xNN
         
         def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
 
@@ -140,8 +139,7 @@ xNN
             return train_x, test_x, train_y, test_y, task_type, meta_info
 
         train_x, test_x, train_y, test_y, task_type, meta_info = data_generator1(datanum=10000, testnum=10000, noise_sigma=1, rand_seed=0)
-        model = xNN(input_num=train_x.shape[1],
-                       meta_info=meta_info,
+        model = xNN(meta_info=meta_info,
                        subnet_num=10,
                        subnet_arch=[10, 6],
                        task_type=task_type,
@@ -166,7 +164,7 @@ SOSxNN
 
         # Simulation
         import numpy as np
-        from xnn import SOSxNN
+        from exnn import ExNN
         
         def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
 
@@ -219,8 +217,7 @@ SOSxNN
             return train_x, test_x, train_y, test_y, task_type, meta_info
 
         train_x, test_x, train_y, test_y, task_type, meta_info = data_generator1(datanum=10000, testnum=10000, noise_sigma=1, rand_seed=0)
-        model = SOSxNN(input_num=train_x.shape[1],
-                       meta_info=meta_info,
+        model = ExNN(meta_info=meta_info,
                        subnet_num=10,
                        subnet_arch=[10, 6],
                        task_type=task_type,
@@ -239,4 +236,4 @@ SOSxNN
                        early_stop_thres=500)
 
         model.fit(train_x, train_y)
-        model.visualize("./", "sosxnn_demo")
+        model.visualize("./", "exnn_demo")

@@ -135,7 +135,7 @@
         
             
             
-              <a href="https://github.com/ZebinYang/sosxnn/blob/master/docs/source/modules.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ZebinYang/exnn/blob/master/docs/source/modules.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -149,11 +149,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-xnn">
-<span id="modules"></span><h1>Modules<a class="headerlink" href="#module-xnn" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-exnn">
+<span id="modules"></span><h1>Modules<a class="headerlink" href="#module-exnn" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="xnn.xNN">
-<em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">xNN</code><span class="sig-paren">(</span><em>input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/xnn.html#xNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.xNN" title="Permalink to this definition">¶</a></dt>
+<dt id="exnn.xNN">
+<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">xNN</code><span class="sig-paren">(</span><em class="sig-param">subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/xnn.html#xNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.xNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explainable neural network (xNN).</p>
 <p>xNN is based on the Explainable neural network (Joel et al. 2018) with the following implementation details:</p>
 <ol class="arabic simple">
@@ -166,7 +166,6 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_num</strong> (<em>int</em>) – the length of input variables, excluding multi-class categorical variables.</p></li>
 <li><p><strong>subnet_num</strong> (<em>int</em>) – the number of subnetworks.</p></li>
 <li><p><strong>meta_info</strong> (<em>dict</em>) – the meta information of the dataset.</p></li>
 <li><p><strong>subnet_arch</strong> (<em>list</em>) – optional, default=(10, 6).
@@ -190,10 +189,10 @@ The architecture of each subnetworks, the ith element represents the number of n
 </dd></dl>
 
 <dl class="class">
-<dt id="xnn.SOSxNN">
-<em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">SOSxNN</code><span class="sig-paren">(</span><em>input_num, subnet_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/sosxnn.html#SOSxNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.SOSxNN" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sparse, orthogonal and smooth explainable neural network (SOSxNN).</p>
-<p>SOSxNN is based on our paper (Yang et al. 2018) with the following implementation details:</p>
+<dt id="exnn.ExNN">
+<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">ExNN</code><span class="sig-paren">(</span><em class="sig-param">meta_info, subnet_num, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/exnn.html#ExNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.ExNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced explainable neural network (ExNN) based on sparse, orthogonal and smooth constraints.</p>
+<p>ExNN is based on our paper (Yang et al. 2018) with the following implementation details:</p>
 <ol class="arabic simple">
 <li><p>Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.</p></li>
 <li><p>The weights of projection layer are forced to be orthogonal, which is separately optimized via Cayley Transform.</p></li>
@@ -206,7 +205,6 @@ The architecture of each subnetworks, the ith element represents the number of n
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_num</strong> (<em>int</em>) – the length of input variables excluding multi-class categorical variables.</p></li>
 <li><p><strong>subnet_num</strong> (<em>int</em>) – the number of subnetworks.</p></li>
 <li><p><strong>meta_info</strong> (<em>dict</em>) – the meta information of the dataset.</p></li>
 <li><p><strong>subnet_arch</strong> (<em>list</em>) – optional, default=(10, 6), the architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.</p></li>
@@ -231,13 +229,12 @@ The architecture of each subnetworks, the ith element represents the number of n
 </dd></dl>
 
 <dl class="class">
-<dt id="xnn.GAMNet">
-<em class="property">class </em><code class="descclassname">xnn.</code><code class="descname">GAMNet</code><span class="sig-paren">(</span><em>input_num, meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/xnn/gamnet.html#GAMNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#xnn.GAMNet" title="Permalink to this definition">¶</a></dt>
+<dt id="exnn.GAMNet">
+<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">GAMNet</code><span class="sig-paren">(</span><em class="sig-param">meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/gamnet.html#GAMNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.GAMNet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generalized additive model vai neural network implementation. It is just a simplified version of sosxnn with identity projection layer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_num</strong> (<em>int</em>) – the length of input variables, excluding multi-class categorical variables.</p></li>
 <li><p><strong>meta_info</strong> (<em>dict</em>) – the meta information of the dataset.</p></li>
 <li><p><strong>subnet_arch</strong> (<em>list</em>) – optional, default=(10, 6).
 The architecture of each subnetworks, the ith element represents the number of neurons in the ith layer.</p></li>
@@ -281,7 +278,7 @@ Percentage threshold for pruning the subnetworks, which means the subnetworks th
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Zebin Yang and Aijun Zhang
+        &copy; Copyright 2019, Zebin Yang
 
     </p>
   </div>

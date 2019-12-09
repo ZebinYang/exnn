@@ -1,5 +1,5 @@
 Modules
 ================================
 
-.. automodule:: xnn
+.. automodule:: exnn
   :members:

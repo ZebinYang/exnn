@@ -141,7 +141,7 @@
         
             
             
-              <a href="https://github.com/ZebinYang/sosxnn/blob/master/docs/source/examples.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/ZebinYang/exnn/blob/master/docs/source/examples.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -162,7 +162,7 @@
 <h2>GAMNet<a class="headerlink" href="#gamnet" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">xnn</span> <span class="k">import</span> <span class="n">GAMNet</span>
+<span class="kn">from</span> <span class="nn">exnn</span> <span class="k">import</span> <span class="n">GAMNet</span>
 
 <span class="k">def</span> <span class="nf">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
@@ -215,8 +215,7 @@
     <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">meta_info</span>
 
 <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">meta_info</span> <span class="o">=</span> <span class="n">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">GAMNet</span><span class="p">(</span><span class="n">input_num</span><span class="o">=</span><span class="n">train_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-               <span class="n">meta_info</span><span class="o">=</span><span class="n">meta_info</span><span class="p">,</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">GAMNet</span><span class="p">(</span><span class="n">meta_info</span><span class="o">=</span><span class="n">meta_info</span><span class="p">,</span>
                <span class="n">subnet_arch</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
                <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span><span class="p">,</span>
                <span class="n">activation_func</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span>
@@ -238,7 +237,7 @@
 <h2>xNN<a class="headerlink" href="#xnn" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">xnn</span> <span class="k">import</span> <span class="n">xNN</span>
+<span class="kn">from</span> <span class="nn">exnn</span> <span class="k">import</span> <span class="n">xNN</span>
 
 <span class="k">def</span> <span class="nf">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
@@ -291,8 +290,7 @@
     <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">meta_info</span>
 
 <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">meta_info</span> <span class="o">=</span> <span class="n">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">xNN</span><span class="p">(</span><span class="n">input_num</span><span class="o">=</span><span class="n">train_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-               <span class="n">meta_info</span><span class="o">=</span><span class="n">meta_info</span><span class="p">,</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">xNN</span><span class="p">(</span><span class="n">meta_info</span><span class="o">=</span><span class="n">meta_info</span><span class="p">,</span>
                <span class="n">subnet_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                <span class="n">subnet_arch</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
                <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span><span class="p">,</span>
@@ -316,7 +314,7 @@
 <h2>SOSxNN<a class="headerlink" href="#sosxnn" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">xnn</span> <span class="k">import</span> <span class="n">SOSxNN</span>
+<span class="kn">from</span> <span class="nn">exnn</span> <span class="k">import</span> <span class="n">ExNN</span>
 
 <span class="k">def</span> <span class="nf">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
@@ -369,8 +367,7 @@
     <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">meta_info</span>
 
 <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">meta_info</span> <span class="o">=</span> <span class="n">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">SOSxNN</span><span class="p">(</span><span class="n">input_num</span><span class="o">=</span><span class="n">train_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-               <span class="n">meta_info</span><span class="o">=</span><span class="n">meta_info</span><span class="p">,</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ExNN</span><span class="p">(</span><span class="n">meta_info</span><span class="o">=</span><span class="n">meta_info</span><span class="p">,</span>
                <span class="n">subnet_num</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                <span class="n">subnet_arch</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
                <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span><span class="p">,</span>
@@ -389,7 +386,7 @@
                <span class="n">early_stop_thres</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="s2">&quot;sosxnn_demo&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="s2">&quot;exnn_demo&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -415,7 +412,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Zebin Yang and Aijun Zhang
+        &copy; Copyright 2019, Zebin Yang
 
     </p>
   </div>

@@ -14,7 +14,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 project = u'sosxnn'
 
-__version__ = xnn.__version__
+__version__ = exnn.__version__
 __author__ = u'Zebin Yang' 
 copyright = '2019, Zebin Yang'
 exclude_patterns = ['_build']
