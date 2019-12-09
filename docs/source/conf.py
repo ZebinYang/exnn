@@ -12,7 +12,7 @@ extensions = [
 
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'sosxnn'
+project = u'exnn'
 
 __version__ = exnn.__version__
 __author__ = u'Zebin Yang' 
