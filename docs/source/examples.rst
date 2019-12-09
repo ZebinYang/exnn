@@ -10,6 +10,9 @@ GAMNet
 
         # Simulation
         import numpy as np
+        import tensorflow as tf
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.model_selection import train_test_split
         from exnn import GAMNet
 
         def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
@@ -86,7 +89,11 @@ xNN
 
         # Simulation
         import numpy as np
+        import tensorflow as tf
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.model_selection import train_test_split
         from exnn import xNN
+
         
         def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
 
@@ -157,13 +164,16 @@ xNN
         model.fit(train_x, train_y)
         model.visualize("./", "xnn_demo")
 
-SOSxNN
+ExNN
 ---------------------------------------------------
 
 .. code-block::
 
         # Simulation
         import numpy as np
+        import tensorflow as tf
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.model_selection import train_test_split
         from exnn import ExNN
         
         def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):

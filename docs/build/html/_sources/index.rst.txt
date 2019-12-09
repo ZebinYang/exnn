@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-SOSxNN in Python
+ExNN in Python
 ==========================================
 
-Sparse, orthogonal and smooth explainable neural network (SOSxNN).
+Enhanced explainable neural network (ExNN) based on sparse, orthogonal and smooth constraints.
 
 Contents:
 -----------

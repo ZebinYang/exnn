@@ -85,7 +85,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#gamnet">GAMNet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#xnn">xNN</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sosxnn">SOSxNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exnn">ExNN</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
@@ -162,6 +162,9 @@
 <h2>GAMNet<a class="headerlink" href="#gamnet" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">exnn</span> <span class="k">import</span> <span class="n">GAMNet</span>
 
 <span class="k">def</span> <span class="nf">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -237,7 +240,11 @@
 <h2>xNN<a class="headerlink" href="#xnn" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">exnn</span> <span class="k">import</span> <span class="n">xNN</span>
+
 
 <span class="k">def</span> <span class="nf">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 
@@ -310,10 +317,13 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="sosxnn">
-<h2>SOSxNN<a class="headerlink" href="#sosxnn" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="exnn">
+<h2>ExNN<a class="headerlink" href="#exnn" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simulation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">exnn</span> <span class="k">import</span> <span class="n">ExNN</span>
 
 <span class="k">def</span> <span class="nf">data_generator1</span><span class="p">(</span><span class="n">datanum</span><span class="p">,</span> <span class="n">testnum</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">noise_sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rand_seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>

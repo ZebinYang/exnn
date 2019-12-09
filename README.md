@@ -37,7 +37,11 @@ python setup.py install
 ## Usage
 
 ```python
-from exnn import xNN
+import numpy as np
+import tensorflow as tf
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
 from exnn import ExNN
 
 def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
