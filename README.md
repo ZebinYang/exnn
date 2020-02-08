@@ -4,7 +4,7 @@
 
 ### Prerequisite
 
-The following environments are required for pyunidoe package:
+The following environments are required:
 
 - Python 3.7 (anaconda is preferable)
 - tensorflow 2.0
