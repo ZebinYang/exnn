@@ -120,5 +120,4 @@ model.visualize("./", "sosxnn_demo")
 References
 ----------
 Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of
-Neural Networks through Architecture Constraints." 
-arXiv preprint arXiv:1901.03838 (2019).
+Neural Networks through Architecture Constraints."
