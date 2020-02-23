@@ -114,7 +114,7 @@ model = ExNN(meta_info=meta_info,
                early_stop_thres=500)
 
 model.fit(train_x, train_y)
-model.visualize("./", "sosxnn_demo")
+model.visualize("./", "exnn_demo")
 ```
 
 References
