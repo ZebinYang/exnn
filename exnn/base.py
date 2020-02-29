@@ -150,7 +150,6 @@ class BaseNet(tf.keras.Model):
     @tf.function
     def train_step_finetune(self, inputs, labels):
         pass
-
                                        
     def get_active_subnets(self, beta_threshold=0):
         if self.bn_flag:
@@ -203,7 +202,7 @@ class BaseNet(tf.keras.Model):
                 batch_yy = tr_y[offset:(offset + self.batch_size)]
                 self.train_step_init(tf.cast(batch_xx, tf.float32), batch_yy)
 
-            self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
+            self.err_train.append(self.evaluate(tr_x, tr_y, training=False))
             self.err_val.append(self.evaluate(val_x, val_y, training=False))
             if self.verbose & (epoch % 1 == 0):
                 print("Training epoch: %d, train loss: %0.5f, val loss: %0.5f" %
@@ -245,7 +244,7 @@ class BaseNet(tf.keras.Model):
                 batch_yy = tr_y[offset:(offset + self.batch_size)]
                 self.train_step_finetune(tf.cast(batch_xx, tf.float32), batch_yy)
 
-            self.err_train.append(self.evaluate(tr_x, tr_y, training=True))
+            self.err_train.append(self.evaluate(tr_x, tr_y, training=False))
             self.err_val.append(self.evaluate(val_x, val_y, training=False))
             if self.verbose & (epoch % 1 == 0):
                 print("Tuning epoch: %d, train loss: %0.5f, val loss: %0.5f" %
