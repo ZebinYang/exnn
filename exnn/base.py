@@ -177,12 +177,17 @@ class BaseNet(tf.keras.Model):
         self.err_val = []
         self.err_train = []
     
+        n_samples = train_x.shape[0]
+        indices = np.arange(n_samples)
         if self.task_type == "Regression":
-            tr_x, val_x, tr_y, val_y = train_test_split(train_x, train_y, test_size=self.val_ratio, 
+            tr_x, val_x, tr_y, val_y, tr_idx, val_idx = train_test_split(train_x, train_y, indices, test_size=self.val_ratio, 
                                           random_state=self.random_state)
         elif self.task_type == "Classification":
-            tr_x, val_x, tr_y, val_y = train_test_split(train_x, train_y, test_size=self.val_ratio, 
+            tr_x, val_x, tr_y, val_y, tr_idx, val_idx = train_test_split(train_x, train_y, indices, test_size=self.val_ratio, 
                                       stratify=train_y, random_state=self.random_state)
+        self.tr_idx = tr_idx
+        self.val_idx = val_idx
+
         # 1. Training
         if self.verbose:
             print("Initial training.")
@@ -267,7 +272,6 @@ class BaseNet(tf.keras.Model):
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
 
-        return tr_x, val_x, tr_y, val_y
 
     def visualize(self, folder="./results/", name="demo", save_png=True, save_eps=False):
         if not os.path.exists(folder):
