@@ -4,7 +4,7 @@
 
 ### Prerequisite
 
-The following environments are required for pyunidoe package:
+The following environments are required:
 
 - Python 3.7 (anaconda is preferable)
 - tensorflow 2.0
@@ -114,7 +114,7 @@ model = ExNN(meta_info=meta_info,
                early_stop_thres=500)
 
 model.fit(train_x, train_y)
-model.visualize("./", "sosxnn_demo")
+model.visualize("./", "exnn_demo")
 ```
 
 References
