@@ -267,10 +267,7 @@ class BaseNet(tf.keras.Model):
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
 
-        self.tr_x = tr_x
-        self.val_x = val_x
-        self.tr_y = tr_y
-        self.val_y = val_y
+        return tr_x, val_x, tr_y, val_y
 
     def visualize(self, folder="./results/", name="demo", save_png=True, save_eps=False):
         if not os.path.exists(folder):
