@@ -273,7 +273,7 @@ class BaseNet(tf.keras.Model):
             self.subnet_input_max.append(max_)
 
 
-    def visualize(self, folder="./results/", name="demo", save_png=True, save_eps=False):
+    def visualize(self, folder="./results/", name="demo", save_png=False, save_eps=False):
         if not os.path.exists(folder):
             os.makedirs(folder)
         save_path = folder + name
