@@ -323,7 +323,7 @@ class BaseNet(tf.keras.Model):
             ax2.set_yticklabels(["{0: .2f}".format(j) for j in yint])
             if i == 0:
                 ax1.set_title("Ridge Functions", fontsize=24)
-                ax2.set_title("Projection Indexes", fontsize=24)
+                ax2.set_title("Projection Indices", fontsize=24)
 
         if self.categ_variable_num > 0:
             for indice in active_categ_index:
