@@ -1,19 +1,20 @@
 import os
 import numpy as np
+import tensorflow as tf
 import matplotlib.lines as mlines
 from matplotlib import pyplot as plt
+from abc import ABCMeta, abstractmethod
 from sklearn.model_selection import train_test_split
 
-import tensorflow as tf
 from .layers import ProjectLayer, SubnetworkBlock, OutputLayer, CategNetBlock
 
 
-class BaseNet(tf.keras.Model):
+class BaseNet(tf.keras.Model, metaclass=ABCMeta):
     """
     Abstract Class.
 
     """
-
+    @abstractmethod
     def __init__(self, meta_info,
                  subnet_num=10,
                  subnet_arch=[10, 6],

@@ -1,1 +1,4 @@
 scripts/*
+examples/results/*
+examples/.ipynb_checkpoints/*
+examples/*.png
