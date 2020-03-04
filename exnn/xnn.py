@@ -104,7 +104,7 @@ class xNN(BaseNet):
     def train_step_init(self, inputs, labels):
 
         with tf.GradientTape() as tape:
-            pred = self.apply(inputs, training=True)
+            pred = self.__call__(inputs, training=True)
             pred_loss = self.loss_fn(labels, pred)
             regularization_loss = tf.math.add_n(self.proj_layer.losses + self.output_layer.losses)
             total_loss = pred_loss + regularization_loss
@@ -116,7 +116,7 @@ class xNN(BaseNet):
     def train_step_finetune(self, inputs, labels):
 
         with tf.GradientTape() as tape:
-            pred = self.apply(inputs, training=True)
+            pred = self.__call__(inputs, training=True)
             pred_loss = self.loss_fn(labels, pred)
             total_loss = pred_loss
 

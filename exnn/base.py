@@ -131,14 +131,14 @@ class BaseNet(tf.keras.Model):
 
     @tf.function
     def predict_graph(self, x):
-        return self.apply(tf.cast(x, tf.float32), training=False)
+        return self.__call__(tf.cast(x, tf.float32), training=False)
 
     def predict(self, x):
         return self.predict_graph(x).numpy()
     
     @tf.function
     def evaluate_graph(self, x, y, training=False):
-        return self.loss_fn(y, self.apply(tf.cast(x, tf.float32), training=training))
+        return self.loss_fn(y, self.__call__(tf.cast(x, tf.float32), training=training))
 
     def evaluate(self, x, y, training=False):
         return self.evaluate_graph(x, y, training=training).numpy()
@@ -290,7 +290,7 @@ class BaseNet(tf.keras.Model):
             min_ = self.subnet_input_min[indice]
             max_ = self.subnet_input_max[indice]
             subnets_inputs = np.linspace(min_, max_, 1000).reshape([-1, 1])
-            subnets_outputs = np.sign(beta[indice]) * subnet.apply(tf.cast(tf.constant(subnets_inputs), tf.float32)).numpy()
+            subnets_outputs = np.sign(beta[indice]) * subnet.__call__(tf.cast(tf.constant(subnets_inputs), tf.float32)).numpy()
 
             if coef_index[np.argmax(np.abs(coef_index[:, indice])), indice] < 0:
                 coef_index[:, indice] = - coef_index[:, indice]
