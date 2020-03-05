@@ -226,6 +226,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         if self.verbose:
             print("Subnetwork pruning.")
 
+        self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         active_me_index, active_categ_index, _, _ = self.get_active_subnets(self.beta_threshold)
         scal_factor = np.zeros((self.subnet_num + self.categ_variable_num, 1))
         scal_factor[active_me_index] = 1
@@ -267,6 +268,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         # record the key values in the network
         self.subnet_input_min = []
         self.subnet_input_max = []
+        self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         for i in range(self.subnet_num):
             min_ = np.dot(train_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].min()
             max_ = np.dot(train_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].max()
