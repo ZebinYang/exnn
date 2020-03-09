@@ -156,7 +156,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         if self.bn_flag:
             beta = self.output_layer.output_weights.numpy()
         else:
-            subnet_norm = [self.subnet_blocks.subnets[i].moving_norm.numpy()[0] for i in range(self.numerical_input_num)]
+            subnet_norm = [self.subnet_blocks.subnets[i].moving_norm.numpy()[0] for i in range(self.subnet_num)]
             categ_norm = [self.categ_blocks.categnets[i].moving_norm.numpy()[0]for i in range(self.categ_variable_num)]
             beta = self.output_layer.output_weights.numpy() * np.hstack([subnet_norm, categ_norm]).reshape([-1, 1])
         beta = beta * self.output_layer.output_switcher.numpy()
