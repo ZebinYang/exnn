@@ -90,7 +90,7 @@ class xNN(BaseNet):
                           lr_bp=lr_bp,
                           l1_proj=l1_proj,
                           l1_subnet=l1_subnet,
-                          smooth_lambda=0,
+                          l2_smooth=0,
                           batch_size=batch_size,
                           training_epochs=training_epochs,
                           tuning_epochs=tuning_epochs,

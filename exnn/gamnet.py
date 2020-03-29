@@ -44,6 +44,9 @@ class GAMNet(BaseNet):
     :type  l1_subnet: float
     :param l1_subnet: optional, default=0.001, the strength of L1 penalty for scaling layer.
 
+    :type  l2_smooth: float
+    :param l2_smooth: optional, default=0.000001, the strength of roughness penalty for subnetworks.
+
     :type  verbose: bool
     :param verbose: optional, default=False. If True, detailed messages will be printed.
 
@@ -60,7 +63,7 @@ class GAMNet(BaseNet):
 
     def __init__(self, meta_info, subnet_arch=[10, 6], task_type="Regression",
                  activation_func=tf.tanh, batch_size=1000, training_epochs=10000, lr_bp=0.001,
-                 beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=0.000001,
+                 beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, l2_smooth=0.000001,
                  verbose=False, val_ratio=0.2, early_stop_thres=1000):
 
         super(GAMNet, self).__init__(meta_info=meta_info,
@@ -73,7 +76,7 @@ class GAMNet(BaseNet):
                              lr_bp=lr_bp,
                              l1_proj=0,
                              l1_subnet=l1_subnet,
-                             smooth_lambda=smooth_lambda,
+                             l2_smooth=l2_smooth,
                              batch_size=batch_size,
                              training_epochs=training_epochs,
                              tuning_epochs=tuning_epochs,
@@ -90,7 +93,7 @@ class GAMNet(BaseNet):
             pred_loss = self.loss_fn(labels, pred)
             regularization_loss = tf.math.add_n(self.output_layer.losses)
             total_loss = pred_loss + regularization_loss
-            if self.smooth_lambda > 0:
+            if self.l2_smooth > 0:
                 smoothness_loss = self.subnet_blocks.smooth_loss
                 total_loss += smoothness_loss
 
@@ -110,7 +113,7 @@ class GAMNet(BaseNet):
             pred = self.__call__(inputs, training=True)
             pred_loss = self.loss_fn(labels, pred)
             total_loss = pred_loss
-            if self.smooth_lambda > 0:
+            if self.l2_smooth > 0:
                 smoothness_loss = self.subnet_blocks.smooth_loss
                 total_loss += smoothness_loss
 

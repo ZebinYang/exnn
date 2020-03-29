@@ -25,7 +25,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                  lr_bp=0.001,
                  l1_proj=0.001,
                  l1_subnet=0.001,
-                 smooth_lambda=0.00001,
+                 l2_smooth=0.00001,
                  batch_size=1000,
                  training_epochs=2000,
                  tuning_epochs=500,
@@ -38,7 +38,6 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         super(BaseNet, self).__init__()
 
         # Parameter initiation
-        self.meta_info = meta_info
         self.subnet_num = subnet_num
         self.subnet_arch = subnet_arch
         self.task_type = task_type
@@ -49,7 +48,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         self.lr_bp = lr_bp
         self.l1_proj = l1_proj
         self.l1_subnet = l1_subnet
-        self.smooth_lambda = smooth_lambda
+        self.l2_smooth = l2_smooth
         self.batch_size = batch_size
         self.beta_threshold = beta_threshold
         self.tuning_epochs = tuning_epochs
@@ -63,43 +62,52 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         np.random.seed(random_state)
         tf.random.set_seed(random_state)
 
-        self.categ_variable_num = 0
-        self.numerical_input_num = 0
-        self.categ_variable_list = []
-        self.categ_index_list = []
-        self.noncateg_index_list = []
-        self.noncateg_variable_list = []
-        self.variables_names = list(self.meta_info.keys())
-        for i, (key, item) in enumerate(self.meta_info.items()):
-            if item['type'] == "target":
-                continue
-            if item['type'] == "categorical":
-                self.categ_variable_num += 1
-                self.categ_variable_list.append(key)
-                self.categ_index_list.append(i)
-            else:
-                self.numerical_input_num +=1
-                self.noncateg_index_list.append(i)
-                self.noncateg_variable_list.append(key)
-
-        self.subnet_num = min(self.subnet_num, self.numerical_input_num)
-        # build
-        self.proj_layer = ProjectLayer(index_list=list(self.noncateg_index_list),
-                                       subnet_num=self.subnet_num,
-                                           l1_proj=self.l1_proj,
-                                           method=self.proj_method)
+        self.dummy_values_ = {}
+        self.nfeature_scaler_ = {}
+        self.cfeature_num_ = 0
+        self.nfeature_num_ = 0
+        self.cfeature_list_ = []
+        self.nfeature_list_ = []
+        self.cfeature_index_list_ = []
+        self.nfeature_index_list_ = []
         
-        self.categ_blocks = CategNetBlock(meta_info=self.meta_info, 
-                                         categ_variable_list=self.categ_variable_list, 
-                                         categ_index_list=self.categ_index_list,
-                                         bn_flag=self.bn_flag)
+        self.feature_list_ = []
+        self.feature_type_list_ = []
+        for idx, (feature_name, feature_info) in enumerate(meta_info.items()):
+            if feature_info["type"] == "target":
+                continue
+            if feature_info["type"] == "categorical":
+                self.cfeature_num_ += 1
+                self.cfeature_list_.append(feature_name)
+                self.cfeature_index_list_.append(idx)
+                self.feature_type_list_.append("categorical")
+                self.dummy_values_.update({feature_name:meta_info[feature_name]["values"]})
+            else:
+                self.nfeature_num_ += 1
+                self.nfeature_list_.append(feature_name)
+                self.nfeature_index_list_.append(idx)
+                self.feature_type_list_.append("continuous")
+                self.nfeature_scaler_.update({feature_name:meta_info[feature_name]["scaler"]})
+            self.feature_list_.append(feature_name)
+
+        # build
+        self.subnet_num = min(self.subnet_num, self.nfeature_num_)
+        self.proj_layer = ProjectLayer(index_list=self.nfeature_index_list_,
+                               subnet_num=self.subnet_num,
+                               l1_proj=self.l1_proj,
+                               method=self.proj_method)
+        
+        self.categ_blocks = CategNetBlock(feature_list=self.feature_list_,
+                               cfeature_index_list=self.cfeature_index_list_,
+                               dummy_values=self.dummy_values_, 
+                               bn_flag=self.bn_flag)
 
         self.subnet_blocks = SubnetworkBlock(subnet_num=self.subnet_num,
-                                             subnet_arch=self.subnet_arch,
-                                             activation_func=self.activation_func,
-                                             smooth_lambda=self.smooth_lambda,
-                                             bn_flag=self.bn_flag)
-        self.output_layer = OutputLayer(subnet_num=self.subnet_num + self.categ_variable_num, l1_subnet=self.l1_subnet)
+                                 subnet_arch=self.subnet_arch,
+                                 activation_func=self.activation_func,
+                                 l2_smooth=self.l2_smooth,
+                                 bn_flag=self.bn_flag)
+        self.output_layer = OutputLayer(subnet_num=self.subnet_num + self.cfeature_num_, l1_subnet=self.l1_subnet)
 
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=self.lr_bp)
         if self.task_type == "Regression":
@@ -116,9 +124,9 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         self.subnet_outputs = self.subnet_blocks(self.proj_outputs, training=training)
         
         concat_list = []
-        if self.numerical_input_num > 0:
+        if self.nfeature_num_ > 0:
             concat_list.append(self.subnet_outputs)
-        if self.categ_variable_num > 0:
+        if self.cfeature_num_ > 0:
             concat_list.append(self.categ_outputs)
 
         if self.task_type == "Regression":
@@ -157,7 +165,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             beta = self.output_layer.output_weights.numpy()
         else:
             subnet_norm = [self.subnet_blocks.subnets[i].moving_norm.numpy()[0] for i in range(self.subnet_num)]
-            categ_norm = [self.categ_blocks.categnets[i].moving_norm.numpy()[0]for i in range(self.categ_variable_num)]
+            categ_norm = [self.categ_blocks.categnets[i].moving_norm.numpy()[0]for i in range(self.cfeature_num_)]
             beta = self.output_layer.output_weights.numpy() * np.hstack([subnet_norm, categ_norm]).reshape([-1, 1])
         beta = beta * self.output_layer.output_switcher.numpy()
         subnets_scale = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
@@ -169,7 +177,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         for i in active_index:
             if i in range(self.subnet_num):
                 active_me_index.append(i)
-            elif i in range(self.subnet_num, self.subnet_num + self.categ_variable_num):
+            elif i in range(self.subnet_num, self.subnet_num + self.cfeature_num_):
                 active_categ_index.append(i)
         return active_me_index, active_categ_index, beta, subnets_scale
 
@@ -228,7 +236,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
 
         self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         active_me_index, active_categ_index, _, _ = self.get_active_subnets(self.beta_threshold)
-        scal_factor = np.zeros((self.subnet_num + self.categ_variable_num, 1))
+        scal_factor = np.zeros((self.subnet_num + self.cfeature_num_, 1))
         scal_factor[active_me_index] = 1
         scal_factor[active_categ_index] = 1
         self.output_layer.output_switcher.assign(tf.constant(scal_factor, dtype=tf.float32))
@@ -270,8 +278,8 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         self.subnet_input_max = []
         self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         for i in range(self.subnet_num):
-            min_ = np.dot(train_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].min()
-            max_ = np.dot(train_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].max()
+            min_ = np.dot(tr_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].min()
+            max_ = np.dot(tr_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].max()
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
 
@@ -328,21 +336,21 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax1.set_title("Ridge Functions", fontsize=24)
                 ax2.set_title("Projection Indices", fontsize=24)
 
-        if self.categ_variable_num > 0:
+        if self.cfeature_num_ > 0:
             for indice in active_categ_index:
-                dummy_name = self.categ_variable_list[indice - self.numerical_input_num]
+                feature_name = self.cfeature_list_[indice - self.numerical_input_num]
                 dummy_gamma = self.categ_blocks.categnets[indice - self.numerical_input_num].categ_bias.numpy()
                 norm = self.categ_blocks.categnets[indice - self.numerical_input_num].moving_norm.numpy()
                 ax3 = f.add_subplot(np.int(max_ids), 1, np.int(max_ids))
-                ax3.bar(np.arange(len(self.meta_info[dummy_name]['values'])), np.sign(beta[indice]) * dummy_gamma[:, 0] / norm)
-                ax3.set_xticks(np.arange(len(self.meta_info[dummy_name]['values'])))
-                ax3.set_xticklabels(self.meta_info[self.categ_variable_list[indice - self.numerical_input_num]]['values'], fontsize=14)
+                ax3.bar(np.arange(len(self.dummy_values_[feature_name])), np.sign(beta[indice]) * dummy_gamma[:, 0] / norm)
+                ax3.set_xticks(np.arange(len(self.dummy_values_[feature_name])))
+                ax3.set_xticklabels(self.dummy_values_[feature_name], fontsize=14)
 
                 yint = np.round(np.linspace(np.min(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm),
                            np.max(np.sign(beta[indice]) * dummy_gamma[:, 0] / norm), 6), 2)
                 ax3.set_yticks(yint)
                 ax3.set_yticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
-                ax3.set_title(dummy_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
+                ax3.set_title(feature_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
 
         if max_ids > 0:
             if save_png:

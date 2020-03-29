@@ -19,23 +19,6 @@ class ProjectLayer(tf.keras.layers.Layer):
         if self.method == "random":
             self.kernel_iniializer = tf.keras.initializers.GlorotNormal()
 
-        elif self.method == "comb":
-            init = np.zeros((self.input_num, self.subnet_num), dtype=np.float32)
-            cct = 0
-            kmax = 0
-            while cct < self.subnet_num:
-                kmax += 1
-                cct += comb(self.input_num, kmax)
-            itr = itertools.combinations(range(self.input_num), 1)
-            for k in range(2, kmax + 1):
-                itr = itertools.chain(itr, itertools.combinations(range(self.input_num), k))
-            for i, v in enumerate(itr):
-                if i < self.subnet_num:
-                    init[np.array(v), i] = 1.0
-                else:
-                    pass
-            self.kernel_iniializer = tf.keras.initializers.Constant(init)
-
         elif self.method == "orthogonal":
             self.kernel_iniializer = tf.keras.initializers.orthogonal()
 
@@ -43,14 +26,12 @@ class ProjectLayer(tf.keras.layers.Layer):
             self.kernel_iniializer = tf.keras.initializers.constant(np.eye(self.input_num))
             self.trainable = False
 
-    def build(self, input_shape=None):
         self.proj_weights = self.add_weight(name="proj_weights",
                                             shape=[self.input_num, self.subnet_num],
                                             dtype=tf.float32,
                                             initializer=self.kernel_iniializer,
                                             trainable=self.trainable,
                                             regularizer=tf.keras.regularizers.l1(self.l1_proj))
-        self.built = True
 
     def call(self, inputs, training=False):
         output = tf.matmul(tf.gather(inputs, self.index_list, axis=1), self.proj_weights)
@@ -59,20 +40,19 @@ class ProjectLayer(tf.keras.layers.Layer):
 
 class CategNet(tf.keras.layers.Layer):
 
-    def __init__(self, depth, bn_flag=True, cagetnet_id=0):
+    def __init__(self, category_num, bn_flag=True, cagetnet_id=0):
         super(CategNet, self).__init__()
+        
         self.bn_flag = bn_flag
-        self.depth = depth
+        self.category_num = category_num
         self.cagetnet_id = cagetnet_id
 
-    def build(self, input_shape=None):
         self.categ_bias = self.add_weight(name="cate_bias_" + str(self.cagetnet_id),
                                                  shape=[self.depth, 1],
                                                  initializer=tf.zeros_initializer(),
                                                  trainable=True)
         self.moving_mean = self.add_weight(name="mean" + str(self.cagetnet_id), shape=[1], initializer=tf.zeros_initializer(), trainable=False)
         self.moving_norm = self.add_weight(name="norm" + str(self.cagetnet_id), shape=[1], initializer=tf.ones_initializer(), trainable=False)
-        self.built = True
 
     def call(self, inputs, training=False):
 
@@ -97,41 +77,40 @@ class CategNet(tf.keras.layers.Layer):
 
 class CategNetBlock(tf.keras.layers.Layer):
 
-    def __init__(self, meta_info, categ_variable_list=[], categ_index_list=[], bn_flag=True):
+    def __init__(self, feature_list, cfeature_index_list, dummy_values, bn_flag=True):
         super(CategNetBlock, self).__init__()
-        self.meta_info = meta_info
-        self.categ_variable_list = categ_variable_list
-        self.categ_index_list = categ_index_list
+
+        self.dummy_values = dummy_values
+        self.feature_list = feature_list
+        self.cfeature_index_list = cfeature_index_list
         self.bn_flag = bn_flag
 
-    def build(self, input_shape=None):
         self.categnets = []
-        for i, key in enumerate(self.categ_variable_list):
-            self.categnets.append(CategNet(depth=len(self.meta_info[key]['values']), bn_flag=self.bn_flag, cagetnet_id=i))
-        self.built = True
+        for i in self.cfeature_index_list:
+            feature_name = self.feature_list[i]
+            self.categnets.append(CategNet(category_num=len(self.dummy_values[feature_name]), bn_flag=self.bn_flag, cagetnet_id=i))
 
     def call(self, inputs, training=False):
         output = 0
-        if len(self.categ_variable_list) > 0:
+        if len(self.cfeature_index_list) > 0:
             self.categ_output = []
-            for i, key in enumerate(self.categ_variable_list):
-                self.categ_output.append(self.categnets[i](tf.gather(inputs, [self.categ_index_list[i]], axis=1), training=training))
-            output = tf.reshape(tf.squeeze(tf.stack(self.categ_output, 1)), [-1, len(self.categ_variable_list)])
+            for i in self.cfeature_index_list:
+                self.categ_output.append(self.categnets[i](tf.gather(inputs, [self.cfeature_index_list[i]], axis=1), training=training))
+            output = tf.reshape(tf.squeeze(tf.stack(self.categ_output, 1)), [-1, len(self.cfeature_index_list)])
         return output
 
 
 class Subnetwork(tf.keras.layers.Layer):
 
-    def __init__(self, subnet_arch=[10, 6], activation_func=tf.tanh, smooth_lambda=0.0, bn_flag=False, subnet_id=0):
+    def __init__(self, subnet_arch=[10, 6], activation_func=tf.tanh, l2_smooth=0.0, bn_flag=False, subnet_id=0):
         super(Subnetwork, self).__init__()
         self.dense = []
         self.subnet_arch = subnet_arch
         self.activation_func = activation_func
-        self.smooth_lambda = smooth_lambda
+        self.l2_smooth = l2_smooth
         self.bn_flag = bn_flag
         self.subnet_id = subnet_id
 
-    def build(self, input_shape=None):
         for nodes in self.subnet_arch:
             self.dense.append(layers.Dense(nodes, activation=self.activation_func,
                                            kernel_initializer=tf.keras.initializers.GlorotNormal()))
@@ -139,7 +118,6 @@ class Subnetwork(tf.keras.layers.Layer):
                                          kernel_initializer=tf.keras.initializers.GlorotNormal())
         self.moving_mean = self.add_weight(name="mean" + str(self.subnet_id), shape=[1], initializer=tf.zeros_initializer(), trainable=False)
         self.moving_norm = self.add_weight(name="norm" + str(self.subnet_id), shape=[1], initializer=tf.ones_initializer(), trainable=False)
-        self.built = True
 
     def call(self, inputs, training=False):
         with tf.GradientTape() as t1:
@@ -172,23 +150,21 @@ class Subnetwork(tf.keras.layers.Layer):
 
 class SubnetworkBlock(tf.keras.layers.Layer):
 
-    def __init__(self, subnet_num, subnet_arch=[10, 6], activation_func=tf.tanh, smooth_lambda=0.0, bn_flag=True):
+    def __init__(self, subnet_num, subnet_arch=[10, 6], activation_func=tf.tanh, l2_smooth=0.0, bn_flag=True):
         super(SubnetworkBlock, self).__init__()
         self.subnet_num = subnet_num
         self.subnet_arch = subnet_arch
         self.activation_func = activation_func
-        self.smooth_lambda = smooth_lambda
+        self.l2_smooth = l2_smooth
         self.bn_flag = bn_flag
 
-    def build(self, input_shape=None):
         self.subnets = []
         for i in range(self.subnet_num):
             self.subnets.append(Subnetwork(self.subnet_arch,
-                                           self.activation_func,
-                                           self.smooth_lambda,
-                                           self.bn_flag,
-                                           subnet_id=i))
-        self.built = True
+                                   self.activation_func,
+                                   self.l2_smooth,
+                                   self.bn_flag,
+                                   subnet_id=i))
 
     def call(self, inputs, training=False):
         self.smooth_penalties = []
@@ -201,7 +177,7 @@ class SubnetworkBlock(tf.keras.layers.Layer):
             self.smooth_penalties.append(subnet.smooth_penalty)
 
         output = tf.reshape(tf.squeeze(tf.stack(self.subnet_outputs, 1)), [-1, self.subnet_num])
-        self.smooth_loss = self.smooth_lambda * tf.reduce_sum(self.smooth_penalties)
+        self.smooth_loss = self.l2_smooth * tf.reduce_sum(self.smooth_penalties)
         return output
 
 
@@ -212,7 +188,6 @@ class OutputLayer(tf.keras.layers.Layer):
         self.l1_subnet = l1_subnet
         self.subnet_num = subnet_num
 
-    def build(self, input_shape=None):
         self.output_weights = self.add_weight(name="output_weights",
                                               shape=[self.subnet_num, 1],
                                               initializer=tf.keras.initializers.GlorotNormal(),
@@ -226,7 +201,6 @@ class OutputLayer(tf.keras.layers.Layer):
                                            shape=[1],
                                            initializer=tf.zeros_initializer(),
                                            trainable=True)
-        self.built = True
 
     def call(self, inputs, training=False):
         output = (tf.matmul(inputs, self.output_switcher * self.output_weights) + self.output_bias)
