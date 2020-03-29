@@ -289,7 +289,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             os.makedirs(folder)
         save_path = folder + name
 
-        input_size = self.numerical_input_num
+        input_size = self.nfeature_num_
         coef_index = self.proj_layer.proj_weights.numpy()
         active_index, active_categ_index, beta, subnets_scale = self.get_active_subnets()
         max_ids = len(active_index) + len(active_categ_index)

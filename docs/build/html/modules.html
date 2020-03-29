@@ -190,7 +190,7 @@ The architecture of each subnetworks, the ith element represents the number of n
 
 <dl class="class">
 <dt id="exnn.ExNN">
-<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">ExNN</code><span class="sig-paren">(</span><em class="sig-param">meta_info, subnet_num, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/exnn.html#ExNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.ExNN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">ExNN</code><span class="sig-paren">(</span><em class="sig-param">meta_info, subnet_num, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, lr_cl=0.1, beta_threshold=0.05, tuning_epochs=500, l1_proj=0.001, l1_subnet=0.001, l2_smooth=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000, random_state=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/exnn.html#ExNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.ExNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enhanced explainable neural network (ExNN) based on sparse, orthogonal and smooth constraints.</p>
 <p>ExNN is based on our paper (Yang et al. 2018) with the following implementation details:</p>
 <ol class="arabic simple">
@@ -218,7 +218,7 @@ The architecture of each subnetworks, the ith element represents the number of n
 <li><p><strong>tuning_epochs</strong> (<em>int</em>) – optional, default=500, the number of tunning epochs.</p></li>
 <li><p><strong>l1_proj</strong> (<em>float</em>) – optional, default=0.001, the strength of L1 penalty for projection layer.</p></li>
 <li><p><strong>l1_subnet</strong> (<em>float</em>) – optional, default=0.001, the strength of L1 penalty for scaling layer.</p></li>
-<li><p><strong>smooth_lambda</strong> (<em>float</em>) – optional, default=0.000001, the strength of roughness penalty for subnetworks.</p></li>
+<li><p><strong>l2_smooth</strong> (<em>float</em>) – optional, default=0.000001, the strength of roughness penalty for subnetworks.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – optional, default=False. If True, detailed messages will be printed.</p></li>
 <li><p><strong>val_ratio</strong> (<em>float</em>) – optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p></li>
 <li><p><strong>early_stop_thres</strong> (<em>int</em>) – optional, default=1000. Maximum number of epochs if no improvement occurs.</p></li>
@@ -230,7 +230,7 @@ The architecture of each subnetworks, the ith element represents the number of n
 
 <dl class="class">
 <dt id="exnn.GAMNet">
-<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">GAMNet</code><span class="sig-paren">(</span><em class="sig-param">meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, smooth_lambda=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/gamnet.html#GAMNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.GAMNet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">exnn.</code><code class="sig-name descname">GAMNet</code><span class="sig-paren">(</span><em class="sig-param">meta_info, subnet_arch=[10, 6], task_type='Regression', activation_func=&lt;function tanh&gt;, batch_size=1000, training_epochs=10000, lr_bp=0.001, beta_threshold=0.05, tuning_epochs=500, l1_subnet=0.001, l2_smooth=1e-06, verbose=False, val_ratio=0.2, early_stop_thres=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/exnn/gamnet.html#GAMNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#exnn.GAMNet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generalized additive model vai neural network implementation. It is just a simplified version of sosxnn with identity projection layer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -249,6 +249,7 @@ Percentage threshold for pruning the subnetworks, which means the subnetworks th
 <li><p><strong>tuning_epochs</strong> (<em>int</em>) – optional, default=500, the number of tunning epochs.</p></li>
 <li><p><strong>l1_proj</strong> (<em>float</em>) – optional, default=0.001, the strength of L1 penalty for projection layer.</p></li>
 <li><p><strong>l1_subnet</strong> (<em>float</em>) – optional, default=0.001, the strength of L1 penalty for scaling layer.</p></li>
+<li><p><strong>l2_smooth</strong> (<em>float</em>) – optional, default=0.000001, the strength of roughness penalty for subnetworks.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – optional, default=False. If True, detailed messages will be printed.</p></li>
 <li><p><strong>val_ratio</strong> (<em>float</em>) – optional, default=0.2. The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1.</p></li>
 <li><p><strong>early_stop_thres</strong> (<em>int</em>) – optional, default=1000. Maximum number of epochs if no improvement occurs.</p></li>

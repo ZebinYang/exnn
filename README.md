@@ -108,7 +108,7 @@ model = ExNN(meta_info=meta_info,
                tuning_epochs=100,
                l1_proj=0.001,
                l1_subnet=0.01,
-               smooth_lambda=10**(-6),
+               l2_smooth=10**(-6),
                verbose=True,
                val_ratio=0.2,
                early_stop_thres=500)

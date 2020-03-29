@@ -240,7 +240,7 @@ ExNN
                        tuning_epochs=100,
                        l1_proj=best_l1_prob,
                        l1_subnet=best_l1_subnet,
-                       smooth_lambda=10**(-6),
+                       l2_smooth=10**(-6),
                        verbose=True,
                        val_ratio=0.2,
                        early_stop_thres=500)
