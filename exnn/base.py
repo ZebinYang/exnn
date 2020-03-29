@@ -278,8 +278,8 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         self.subnet_input_max = []
         self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         for i in range(self.subnet_num):
-            min_ = np.dot(tr_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].min()
-            max_ = np.dot(tr_x[:,self.noncateg_index_list], self.proj_layer.get_weights()[0])[:, i].max()
+            min_ = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i].min()
+            max_ = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i].max()
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
 
