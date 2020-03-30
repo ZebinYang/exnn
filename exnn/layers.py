@@ -140,9 +140,10 @@ class Subnetwork(tf.keras.layers.Layer):
 
         if self.bn_flag:
             output = (self.output_original - self.subnet_mean) / (self.subnet_norm)
+            self.smooth_penalty = tf.reduce_mean(tf.square(self.grad2)) / self.subnet_norm
         else:
             output = self.output_original
-        self.smooth_penalty = tf.reduce_mean(tf.square(self.grad2)) / self.subnet_norm
+            self.smooth_penalty = tf.reduce_mean(tf.square(self.grad2))
         return output
 
 
