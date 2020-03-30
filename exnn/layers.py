@@ -1,7 +1,5 @@
-import itertools
 import numpy as np
 import tensorflow as tf
-from scipy.special import comb
 from tensorflow.keras import layers
 
 
@@ -53,7 +51,7 @@ class CategNet(tf.keras.layers.Layer):
                                                  trainable=True)
         self.moving_mean = self.add_weight(name="mean" + str(self.cagetnet_id), shape=[1], initializer=tf.zeros_initializer(), trainable=False)
         self.moving_norm = self.add_weight(name="norm" + str(self.cagetnet_id), shape=[1], initializer=tf.ones_initializer(), trainable=False)
-
+        
     def call(self, inputs, training=False):
 
         dummy = tf.one_hot(indices=tf.cast(inputs[:, 0], tf.int32), depth=self.depth)
@@ -89,7 +87,7 @@ class CategNetBlock(tf.keras.layers.Layer):
         for i in self.cfeature_index_list:
             feature_name = self.feature_list[i]
             self.categnets.append(CategNet(category_num=len(self.dummy_values[feature_name]), bn_flag=self.bn_flag, cagetnet_id=i))
-
+        
     def call(self, inputs, training=False):
         output = 0
         if len(self.cfeature_index_list) > 0:
@@ -165,7 +163,7 @@ class SubnetworkBlock(tf.keras.layers.Layer):
                                    self.l2_smooth,
                                    self.bn_flag,
                                    subnet_id=i))
-
+            
     def call(self, inputs, training=False):
         self.smooth_penalties = []
         self.subnet_outputs = []
@@ -188,6 +186,8 @@ class OutputLayer(tf.keras.layers.Layer):
         self.l1_subnet = l1_subnet
         self.subnet_num = subnet_num
 
+    def build(self, input_shape=None):
+
         self.output_weights = self.add_weight(name="output_weights",
                                               shape=[self.subnet_num, 1],
                                               initializer=tf.keras.initializers.GlorotNormal(),
@@ -201,6 +201,7 @@ class OutputLayer(tf.keras.layers.Layer):
                                            shape=[1],
                                            initializer=tf.zeros_initializer(),
                                            trainable=True)
+        self.built = True
 
     def call(self, inputs, training=False):
         output = (tf.matmul(inputs, self.output_switcher * self.output_weights) + self.output_bias)
