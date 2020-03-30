@@ -15,19 +15,19 @@ class ProjectLayer(tf.keras.layers.Layer):
         self.trainable = True
 
         if self.method == "random":
-            self.kernel_iniializer = tf.keras.initializers.GlorotNormal()
+            self.kernel_initializer = tf.keras.initializers.GlorotNormal()
 
         elif self.method == "orthogonal":
-            self.kernel_iniializer = tf.keras.initializers.orthogonal()
+            self.kernel_initializer = tf.keras.initializers.orthogonal()
 
         elif self.method == "gam":
-            self.kernel_iniializer = tf.keras.initializers.constant(np.eye(self.input_num))
+            self.kernel_initializer = tf.keras.initializers.constant(np.eye(self.input_num))
             self.trainable = False
 
         self.proj_weights = self.add_weight(name="proj_weights",
                                             shape=[self.input_num, self.subnet_num],
                                             dtype=tf.float32,
-                                            initializer=self.kernel_iniializer,
+                                            initializer=self.kernel_initializer,
                                             trainable=self.trainable,
                                             regularizer=tf.keras.regularizers.l1(self.l1_proj))
 
