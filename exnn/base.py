@@ -64,7 +64,6 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         tf.random.set_seed(random_state)
 
         self.dummy_values_ = {}
-        self.nfeature_scaler_ = {}
         self.cfeature_num_ = 0
         self.nfeature_num_ = 0
         self.cfeature_list_ = []
@@ -88,7 +87,6 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 self.nfeature_list_.append(feature_name)
                 self.nfeature_index_list_.append(idx)
                 self.feature_type_list_.append("continuous")
-                self.nfeature_scaler_.update({feature_name:meta_info[feature_name]["scaler"]})
             self.feature_list_.append(feature_name)
 
         # build
