@@ -468,10 +468,10 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
                 
                 
-    def visualize_new(self, cols_per_row=3, subnet_num=10**5, dummy_subnet_num=10**5, show_top=10**5,
+    def visualize_new(self, cols_per_row=3, subnet_num=10**5, dummy_subnet_num=10**5, show_indices=10**5,
                   folder="./results/", name="demo", save_png=False, save_eps=False):
 
-        input_size = min(self.nfeature_num_, show_top)
+        input_size = min(self.nfeature_num_, show_indices)
         coef_index = self.proj_layer.proj_weights.numpy()
         projection_indices = self.projection_indices_[:, :subnet_num]
         active_subnets = list(islice(self.active_subnets_.items(), subnet_num))  
