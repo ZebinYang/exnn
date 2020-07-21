@@ -1,8 +1,9 @@
 import os
 import numpy as np
 import tensorflow as tf
-import matplotlib.lines as mlines
+from matplotlib import gridspec
 from matplotlib import pyplot as plt
+from matplotlib import lines as mlines
 from abc import ABCMeta, abstractmethod
 from sklearn.model_selection import train_test_split
 
@@ -367,6 +368,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax3.set_yticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
                 ax3.set_title(feature_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
 
+        plt.show()
         if max_ids > 0:
             save_path = folder + name
             if save_eps:
