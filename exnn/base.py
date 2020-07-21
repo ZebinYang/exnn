@@ -534,7 +534,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax2.axvline(0, linestyle="dotted", color="black")
             fig.add_subplot(ax2)
         
-        for idx, (key, item) in enumerate(active_dummy_subnets.items()):
+        for idx, (key, item) in enumerate(active_dummy_subnets):
 
             indice = item["indice"]
             feature_name = self.cfeature_list_[indice - self.subnet_num]
