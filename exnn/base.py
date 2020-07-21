@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from itertools import *
 import tensorflow as tf
 from matplotlib import gridspec
 from matplotlib import pyplot as plt
