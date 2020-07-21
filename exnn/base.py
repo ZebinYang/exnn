@@ -473,8 +473,8 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         input_size = self.nfeature_num_
         coef_index = self.proj_layer.proj_weights.numpy()[:, :subnet_num]
         projection_indices = self.projection_indices_[:, :subnet_num]
-        active_subnets = self.active_subnets_.items()[:subnet_num]
-        active_dummy_subnets = self.active_dummy_subnets_.items()[:dummy_subnet_num]
+        active_subnets = list(islice(self.active_subnets_.items(), subnet_num))  
+        active_dummy_subnets = list(islice(self.active_dummy_subnets_.items(), dummy_subnet_num))
         max_ids = len(active_subnets_) + len(active_dummy_subnets_)
         fig = plt.figure(figsize=(8 * cols_per_row, 4.6 * int(np.ceil(max_ids / cols_per_row))))
         outer = gridspec.GridSpec(int(np.ceil(max_ids / cols_per_row)), cols_per_row, wspace=0.15, hspace=0.25)
