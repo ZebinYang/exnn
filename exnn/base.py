@@ -472,7 +472,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                   folder="./results/", name="demo", save_png=False, save_eps=False):
 
         input_size = self.nfeature_num_
-        coef_index = self.proj_layer.proj_weights.numpy()[:, :subnet_num]
+        coef_index = self.proj_layer.proj_weights.numpy()
         projection_indices = self.projection_indices_[:, :subnet_num]
         active_subnets = list(islice(self.active_subnets_.items(), subnet_num))  
         active_dummy_subnets = list(islice(self.active_dummy_subnets_.items(), dummy_subnet_num))
