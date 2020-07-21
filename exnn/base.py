@@ -13,7 +13,6 @@ from .layers import ProjectLayer, SubnetworkBlock, OutputLayer, CategNetBlock
 class BaseNet(tf.keras.Model, metaclass=ABCMeta):
     """
     Abstract Class.
-
     """
     @abstractmethod
     def __init__(self, meta_info,
@@ -397,7 +396,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         active_index, active_categ_index, beta, subnets_scale = self.get_active_subnets()
         max_ids = len(active_index) + len(active_categ_index)
 
-        f = plt.figure(figsize=(12, int(max_ids * 4.5)))
+        fig = plt.figure(figsize=(12, int(max_ids * 4.5)))
         for i, indice in enumerate(active_index):
 
             subnet = self.subnet_blocks.subnets[indice]
@@ -425,7 +424,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             ax1.text(0.25, 0.9,'IR: ' + str(np.round(100 * subnets_scale[indice], 1)) + "%",
                   fontsize=24, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
 
-            ax2 = f.add_subplot(np.int(max_ids), 2, i * 2 + 2)
+            ax2 = fig.add_subplot(np.int(max_ids), 2, i * 2 + 2)
             ax2.bar(np.arange(input_size), coef_index.T[indice, :input_size])
 
             ax2.set_xticks(np.arange(input_size))
@@ -444,7 +443,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 feature_name = self.cfeature_list_[indice - self.numerical_input_num]
                 dummy_gamma = self.categ_blocks.categnets[indice - self.numerical_input_num].categ_bias.numpy()
                 norm = self.categ_blocks.categnets[indice - self.numerical_input_num].moving_norm.numpy()
-                ax3 = f.add_subplot(np.int(max_ids), 1, np.int(max_ids))
+                ax3 = fig.add_subplot(np.int(max_ids), 1, np.int(max_ids))
                 ax3.bar(np.arange(len(self.dummy_values_[feature_name])), np.sign(beta[indice]) * dummy_gamma[:, 0] / norm)
                 ax3.set_xticks(np.arange(len(self.dummy_values_[feature_name])))
                 ax3.set_xticklabels(self.dummy_values_[feature_name], fontsize=14)
