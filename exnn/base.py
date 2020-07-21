@@ -159,7 +159,12 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
     @tf.function
     def train_step_finetune(self, inputs, labels):
         pass
-                                       
+              
+    def estimate_density(self, x):
+        
+        density, bins = np.histogram(x, bins=10, density=True)
+        return density, bins
+
     def get_active_subnets(self, beta_threshold=0):
         if self.bn_flag:
             beta = self.output_layer.output_weights.numpy()
@@ -276,18 +281,27 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         # record the key values in the network
         self.subnet_input_min = []
         self.subnet_input_max = []
+        self.dummy_density_ = {}
+        self.subnet_input_density = []
         self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         for i in range(self.subnet_num):
             min_ = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i].min()
             max_ = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i].max()
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
+            self.subnet_input_density.append(self.estimate_density(xb))
+        for idx in range(self.cfeature_num_):
+            feature_name = self.cfeature_list_[idx]
+            feature_indice = self.cfeature_index_list_[idx]
+
+            unique, counts = np.unique(tr_x[:, feature_indice], return_counts=True)
+            density = np.zeros((len(self.dummy_values_[feature_name])))
+            density[unique.astype(int)] = counts / tr_x.shape[0]
+            self.dummy_density_.update({feature_name:{"density":{"values":self.dummy_values_[feature_name],
+                                            "scores":density}}})
 
 
     def visualize(self, folder="./results/", name="demo", save_png=False, save_eps=False):
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        save_path = folder + name
 
         input_size = self.nfeature_num_
         coef_index = self.proj_layer.proj_weights.numpy()
@@ -352,8 +366,127 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax3.set_yticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
                 ax3.set_title(feature_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
 
-        if max_ids > 0:
-            if save_png:
-                f.savefig("%s.png" % save_path, bbox_inches='tight', dpi=100)
+        if max_depth > 0:
+            save_path = folder + name
             if save_eps:
-                f.savefig("%s.eps" % save_path, bbox_inches='tight', dpi=100)
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                fig.savefig("%s.eps" % save_path, bbox_inches="tight", dpi=100)
+            if save_png:
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
+                
+                
+    def visualize_new(self, folder="./results/", name="demo", save_png=False, save_eps=False):
+
+        input_size = self.nfeature_num_
+        coef_index = self.proj_layer.proj_weights.numpy()
+        active_index, active_categ_index, beta, subnets_scale = self.get_active_subnets()
+        max_ids = len(active_index) + len(active_categ_index)
+
+        input_size = self.nfeature_num_
+        coef_index = self.proj_layer.proj_weights.numpy()
+        
+        fig = plt.figure(figsize=(8 * cols_per_row, 4.6 * int(np.ceil(max_ids / cols_per_row))))
+        outer = gridspec.GridSpec(int(np.ceil(max_ids / cols_per_row)), cols_per_row, wspace=0.15, hspace=0.25)
+
+        if self.projection_indices_.shape[1] > 0:
+            xlim_min = - max(np.abs(self.projection_indices_.min() - 0.1), np.abs(self.projection_indices_.max() + 0.1))
+            xlim_max = max(np.abs(self.projection_indices_.min() - 0.1), np.abs(self.projection_indices_.max() + 0.1))
+        
+        idx = 0
+        for i, indice in enumerate(active_index):
+
+            inner = outer[idx].subgridspec(2, 2, wspace=0.15, height_ratios=[6, 1], width_ratios=[3, 1])
+            ax1_main = fig.add_subplot(inner[0, 0])
+            subnet = self.subnet_blocks.subnets[indice]
+            min_ = self.subnet_input_min[indice]
+            max_ = self.subnet_input_max[indice]
+            density, bins = self.subnet_input_density[indice]
+            xgrid = np.linspace(min_, max_, 1000).reshape([-1, 1])
+            ygrid = np.sign(item["beta"]) * subnet.__call__(tf.cast(tf.constant(xgrid), tf.float32)).numpy()
+
+            if coef_index[np.argmax(np.abs(coef_index[:, indice])), indice] < 0:
+                coef_index[:, indice] = - coef_index[:, indice]
+                xgrid = - xgrid
+
+            ax1_main.plot(xgrid, ygrid, color="red")
+            ax1_main.set_xticklabels([])
+            ax1_main.set_title("SIM " + str(idx + 1) + 
+                         " (IR: " + str(np.round(100 * item["ir"], 2)) + "%)", fontsize=16)
+            fig.add_subplot(ax1_main)
+
+            ax1_density = fig.add_subplot(inner[1, 0])  
+            xint = ((np.array(bins[1:]) + np.array(bins[:-1])) / 2).reshape([-1, 1]).reshape([-1])
+            ax1_density.bar(xint, density, width=xint[1] - xint[0])
+            ax1_main.get_shared_x_axes().join(ax1_main, ax1_density)
+            ax1_density.set_yticklabels([])
+            fig.add_subplot(ax1_density)
+            
+            ax2 = fig.add_subplot(inner[:, 1])
+            if input_size <= 10:
+                rects = ax2.barh(np.arange(input_size), [beta for beta in coef_index.T[indice, :input_size].ravel()][::-1])
+                ax2.set_yticks(np.arange(input_size))
+                ax2.set_yticklabels(["X" + str(idx + 1) for idx in range(input_size)][::-1])
+                ax2.set_xlim(xlim_min, xlim_max)
+                ax2.set_ylim(-1, len(coef_index.T[indice, :input_size]))
+                ax2.axvline(0, linestyle="dotted", color="black")
+            else:
+                right = np.round(np.linspace(0, np.round(len(coef_index.T[indice, :input_size].ravel()) * 0.45).astype(int), 5))
+                left = len(coef_index.T[indice, :input_size].ravel()) - 1 - right
+                input_ticks = np.unique(np.hstack([left, right])).astype(int)
+
+                rects = plt.barh(np.arange(len(coef_index.T[indice, :input_size].ravel())),
+                            [beta for beta in coef_index.T[indice, :input_size].ravel()][::-1])
+                ax2.set_yticks(input_ticks)
+                ax2.set_yticklabels(["X" + str(idx + 1) for idx in input_ticks][::-1])
+                ax2.set_xlim(xlim_min, xlim_max)
+                ax2.set_ylim(-1, len(coef_index.T[indice, :input_size].ravel()))
+                ax2.axvline(0, linestyle="dotted", color="black")
+            idx = idx + 1
+            fig.add_subplot(ax2)
+            
+        for i, indice in enumerate(active_categ_index):
+
+            feature_name = self.cfeature_list_[indice - self.subnet_num]
+            norm = self.categ_blocks.categnets[indice - self.subnet_num].moving_norm.numpy()
+            dummy_values = self.dummy_density_[feature_name]["density"]["values"]
+            dummy_scores = self.dummy_density_[feature_name]["density"]["scores"]
+            dummy_coef = self.categ_blocks.categnets[indice - self.subnet_num].categ_bias.numpy()
+            dummy_coef = np.sign(item["beta"]) * dummy_coef[:, 0] / norm
+
+            ax_main = fig.add_subplot(outer[len(active_index) + idx])
+            ax_density = ax_main.twinx()
+            ax_density.bar(np.arange(len(dummy_values)), dummy_scores, width=0.6)
+            ax_density.set_ylim(0, dummy_scores.max() * 1.2)
+            ax_density.set_yticklabels([])
+
+            input_ticks = (np.arange(len(dummy_values)) if len(dummy_values) <= 6 else 
+                              np.linspace(0.1 * len(dummy_coef), len(dummy_coef) * 0.9, 4).astype(int))
+            input_labels = [dummy_values[i] for i in input_ticks]
+            if len("".join(list(map(str, input_labels)))) > 30:
+                input_labels = [str(dummy_values[i])[:4] for i in input_ticks]
+
+            ax_main.set_xticks(input_ticks)
+            ax_main.set_xticklabels(input_labels)
+            ax_main.set_ylim(- np.abs(dummy_coef).max() * 1.2, np.abs(dummy_coef).max() * 1.2)
+            ax_main.plot(np.arange(len(dummy_values)), dummy_coef, color="red", marker="o")
+            ax_main.axhline(0, linestyle="dotted", color="black")
+            ax_main.set_title(feature_name +
+                             " (IR: " + str(np.round(100 * self.importance_ratios_[feature_name]["ir"], 2)) + "%)", fontsize=16)
+            ax_main.set_zorder(ax_density.get_zorder() + 1)
+            ax_main.patch.set_visible(False)
+            idx = idx + 1
+            
+        plt.show()
+        if max_depth > 0:
+        save_path = folder + name
+        if save_eps:
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+            fig.savefig("%s.eps" % save_path, bbox_inches="tight", dpi=100)
+        if save_png:
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+            fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
