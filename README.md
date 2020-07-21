@@ -94,7 +94,7 @@ def data_generator1(datanum, testnum=10000, noise_sigma=1, rand_seed=0):
     train_x, test_x, train_y, test_y = train_test_split(x, y, test_size=testnum, random_state=rand_seed)
     return train_x, test_x, train_y, test_y, task_type, meta_info
 
-train_x, test_x, train_y, test_y, task_type, meta_info = data_generator1(datanum=10000, testnum=10000, noise_sigma=1, rand_seed=0)```
+train_x, test_x, train_y, test_y, task_type, meta_info = data_generator1(datanum=10000, testnum=10000, noise_sigma=1, rand_seed=0)
 model = ExNN(meta_info=meta_info,
                subnet_num=10,
                subnet_arch=[10, 6],

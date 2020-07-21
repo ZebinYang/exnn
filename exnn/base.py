@@ -367,7 +367,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax3.set_yticklabels(["{0: .2f}".format(j) for j in yint], fontsize=14)
                 ax3.set_title(feature_name + " (" + str(np.round(100 * subnets_scale[indice], 1)) + "%)", fontsize=20)
 
-        if max_depth > 0:
+        if max_ids > 0:
             save_path = folder + name
             if save_eps:
                 if not os.path.exists(folder):
@@ -379,7 +379,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
                 
                 
-    def visualize_new(self, folder="./results/", name="demo", save_png=False, save_eps=False):
+    def visualize_new(self, cols_per_row=3, folder="./results/", name="demo", save_png=False, save_eps=False):
 
         input_size = self.nfeature_num_
         coef_index = self.proj_layer.proj_weights.numpy()
@@ -481,7 +481,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             idx = idx + 1
             
         plt.show()
-        if max_depth > 0:
+        if max_ids > 0:
             save_path = folder + name
             if save_eps:
                 if not os.path.exists(folder):
