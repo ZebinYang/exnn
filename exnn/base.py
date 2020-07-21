@@ -467,20 +467,23 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
                 
                 
-    def visualize_new(self, cols_per_row=3, folder="./results/", name="demo", save_png=False, save_eps=False):
+    def visualize_new(self, cols_per_row=3, subnet_num=10**5, dummy_subnet_num=10**5, 
+                  folder="./results/", name="demo", save_png=False, save_eps=False):
 
         input_size = self.nfeature_num_
-        coef_index = self.proj_layer.proj_weights.numpy()
-        
-        max_ids = len(self.active_subnets_) + len(self.active_dummy_subnets_)
+        coef_index = self.proj_layer.proj_weights.numpy()[:, :subnet_num]
+        projection_indices = self.projection_indices_[:, :subnet_num]
+        active_subnets = self.active_subnets_.items()[:subnet_num]
+        active_dummy_subnets = self.active_dummy_subnets_.items()[:dummy_subnet_num]
+        max_ids = len(active_subnets_) + len(active_dummy_subnets_)
         fig = plt.figure(figsize=(8 * cols_per_row, 4.6 * int(np.ceil(max_ids / cols_per_row))))
         outer = gridspec.GridSpec(int(np.ceil(max_ids / cols_per_row)), cols_per_row, wspace=0.15, hspace=0.25)
 
-        if self.projection_indices_.shape[1] > 0:
-            xlim_min = - max(np.abs(self.projection_indices_.min() - 0.1), np.abs(self.projection_indices_.max() + 0.1))
-            xlim_max = max(np.abs(self.projection_indices_.min() - 0.1), np.abs(self.projection_indices_.max() + 0.1))
-        for idx, (key, item) in enumerate(self.active_subnets_.items()):
-
+        if projection_indices.shape[1] > 0:
+            xlim_min = - max(np.abs(projection_indices.min() - 0.1), np.abs(projection_indices.max() + 0.1))
+            xlim_max = max(np.abs(projection_indices.min() - 0.1), np.abs(projection_indices.max() + 0.1))
+        for idx, (key, item) in enumerate(active_subnets):
+            
             indice = item["indice"]
             inner = outer[idx].subgridspec(2, 2, wspace=0.15, height_ratios=[6, 1], width_ratios=[3, 1])
             ax1_main = fig.add_subplot(inner[0, 0])
@@ -509,7 +512,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             fig.add_subplot(ax1_density)
             
             ax2 = fig.add_subplot(inner[:, 1])
-            if input_size <= 10:
+            if input_size <= 20:
                 rects = ax2.barh(np.arange(input_size), [beta for beta in coef_index.T[indice, :input_size].ravel()][::-1])
                 ax2.set_yticks(np.arange(input_size))
                 ax2.set_yticklabels(["X" + str(idx + 1) for idx in range(input_size)][::-1])
@@ -530,7 +533,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax2.axvline(0, linestyle="dotted", color="black")
             fig.add_subplot(ax2)
         
-        for idx, (key, item) in enumerate(self.active_dummy_subnets_.items()):
+        for idx, (key, item) in enumerate(active_dummy_subnets.items()):
 
             indice = item["indice"]
             feature_name = self.cfeature_list_[indice - self.subnet_num]
@@ -558,7 +561,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             ax_main.plot(np.arange(len(dummy_values)), dummy_coef, color="red", marker="o")
             ax_main.axhline(0, linestyle="dotted", color="black")
             ax_main.set_title(feature_name +
-                             " (IR: " + str(np.round(100 * self.importance_ratios_[feature_name]["ir"], 2)) + "%)", fontsize=16)
+                             " (IR: " + str(np.round(100 * item["ir"], 2)) + "%)", fontsize=16)
             ax_main.set_zorder(ax_density.get_zorder() + 1)
             ax_main.patch.set_visible(False)
 
