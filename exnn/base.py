@@ -409,7 +409,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 coef_index[:, indice] = - coef_index[:, indice]
                 subnets_inputs = - subnets_inputs
 
-            ax1 = f.add_subplot(np.int(max_ids), 2, i * 2 + 1)
+            ax1 = fig.add_subplot(np.int(max_ids), 2, i * 2 + 1)
             ax1.plot(subnets_inputs, subnets_outputs)
             
             xint = np.round(np.linspace(np.min(subnets_inputs), np.max(subnets_inputs), 5), 2)
