@@ -160,7 +160,96 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
     @tf.function
     def train_step_finetune(self, inputs, labels):
         pass
-              
+          
+    @property
+    def projection_indices_(self):
+        """Return the projection indices.
+        Returns
+        -------
+        projection_indices_ : ndarray of shape (d, )
+        """
+        projection_indices = np.array([])
+        if self.nfeature_num_ > 0:
+            active_sim_subnets = [item["indice"] for key, item in self.active_subnets_.items()]
+            projection_indices = self.proj_layer.proj_weights.numpy()[:, active_sim_subnets]
+            return projection_indices
+
+    @property
+    def orthogonality_measure_(self):
+        """Return the orthogonality measure (the lower, the better).
+        Returns
+        -------
+        orthogonality_measure_ : float scalar
+        """
+        ortho_measure = np.nan
+        if self.nfeature_num_ > 0:
+            ortho_measure = np.linalg.norm(np.dot(self.projection_indices_.T,
+                                      self.projection_indices_) - np.eye(self.projection_indices_.shape[1]))
+            if self.projection_indices_.shape[1] > 1:
+                ortho_measure /= self.projection_indices_.shape[1]
+        return ortho_measure
+        
+    @property
+    def importance_ratios_(self):
+        """Return the estimator importance ratios (the higher, the more important the feature).
+        Returns
+        -------
+        importance_ratios_ : ndarray of shape (n_estimators,)
+            The estimator importances.
+        """
+        importance_ratios_ = {**self.active_subnets_, **self.active_dummy_subnets_}
+        return importance_ratios_
+
+    @property
+    def active_subnets_(self):
+        """
+        Return the information of sim subnetworks
+        """
+        if self.bn_flag:
+            beta = self.output_layer.output_weights.numpy()
+        else:
+            subnet_norm = [self.subnet_blocks.subnets[i].moving_norm.numpy()[0] for i in range(self.subnet_num)]
+            categ_norm = [self.categ_blocks.categnets[i].moving_norm.numpy()[0]for i in range(self.cfeature_num_)]
+            beta = self.output_layer.output_weights.numpy() * np.hstack([subnet_norm, categ_norm]).reshape([-1, 1])
+            
+        beta = beta * self.output_layer.output_switcher.numpy()
+        importance_ratio = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
+        sorted_index = np.argsort(importance_ratio)
+        active_index = sorted_index[importance_ratio[sorted_index].cumsum() > 0][::-1]
+        active_subnets = {"Subnet " + str(indice + 1):{"type":"sim_net",
+                                          "indice":indice,
+                                          "rank":idx,
+                                          "beta":self.output_layer.output_weights.numpy()[indice],
+                                          "ir":importance_ratio[indice]}
+                      for idx, indice in enumerate(active_index) if indice in range(self.subnet_num)}
+
+        return active_subnets
+
+    @property
+    def active_dummy_subnets_(self):
+        """
+        Return the information of active categorical features
+        """
+        if self.bn_flag:
+            beta = self.output_layer.output_weights.numpy()
+        else:
+            subnet_norm = [self.subnet_blocks.subnets[i].moving_norm.numpy()[0] for i in range(self.subnet_num)]
+            categ_norm = [self.categ_blocks.categnets[i].moving_norm.numpy()[0]for i in range(self.cfeature_num_)]
+            beta = self.output_layer.output_weights.numpy() * np.hstack([subnet_norm, categ_norm]).reshape([-1, 1])
+            
+        beta = beta * self.output_layer.output_switcher.numpy()
+        importance_ratio = (np.abs(beta) / np.sum(np.abs(beta))).reshape([-1])
+        sorted_index = np.argsort(importance_ratio)
+        active_index = sorted_index[importance_ratio[sorted_index].cumsum() > 0][::-1]
+
+        active_dummy_subnets = {self.cfeature_list_[indice - self.subnet_num]:{"type":"dummy_net",
+                                                       "indice":indice,
+                                                       "rank":idx,
+                                                       "beta":self.output_layer.output_weights.numpy()[indice],
+                                                       "ir":importance_ratio[indice]}
+                      for idx, indice in enumerate(active_index) if indice in range(self.subnet_num, self.subnet_num + self.cfeature_num_)}
+        return active_dummy_subnets
+
     def estimate_density(self, x):
         
         density, bins = np.histogram(x, bins=10, density=True)
@@ -385,22 +474,17 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
 
         input_size = self.nfeature_num_
         coef_index = self.proj_layer.proj_weights.numpy()
-        active_index, active_categ_index, beta, subnets_scale = self.get_active_subnets()
-        max_ids = len(active_index) + len(active_categ_index)
-
-        input_size = self.nfeature_num_
-        coef_index = self.proj_layer.proj_weights.numpy()
         
+        max_ids = len(self.active_subnets_) + len(self.active_dummy_subnets_)
         fig = plt.figure(figsize=(8 * cols_per_row, 4.6 * int(np.ceil(max_ids / cols_per_row))))
         outer = gridspec.GridSpec(int(np.ceil(max_ids / cols_per_row)), cols_per_row, wspace=0.15, hspace=0.25)
 
-        if coef_index.shape[1] > 0:
-            xlim_min = - max(np.abs(coef_index.min() - 0.1), np.abs(coef_index.max() + 0.1))
-            xlim_max = max(np.abs(coef_index.min() - 0.1), np.abs(coef_index.max() + 0.1))
-        
-        idx = 0
-        for i, indice in enumerate(active_index):
+        if self.projection_indices_.shape[1] > 0:
+            xlim_min = - max(np.abs(self.projection_indices_.min() - 0.1), np.abs(self.projection_indices_.max() + 0.1))
+            xlim_max = max(np.abs(self.projection_indices_.min() - 0.1), np.abs(self.projection_indices_.max() + 0.1))
+        for idx, (key, item) in enumerate(self.active_subnets_.items()):
 
+            indice = item["indice"]
             inner = outer[idx].subgridspec(2, 2, wspace=0.15, height_ratios=[6, 1], width_ratios=[3, 1])
             ax1_main = fig.add_subplot(inner[0, 0])
             subnet = self.subnet_blocks.subnets[indice]
@@ -408,7 +492,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             max_ = self.subnet_input_max[indice]
             density, bins = self.subnet_input_density[indice]
             xgrid = np.linspace(min_, max_, 1000).reshape([-1, 1])
-            ygrid = beta[indice] * subnet.__call__(tf.cast(tf.constant(xgrid), tf.float32)).numpy()
+            ygrid = np.sign(item["beta"]) * subnet.__call__(tf.cast(tf.constant(xgrid), tf.float32)).numpy()
 
             if coef_index[np.argmax(np.abs(coef_index[:, indice])), indice] < 0:
                 coef_index[:, indice] = - coef_index[:, indice]
@@ -416,8 +500,8 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
 
             ax1_main.plot(xgrid, ygrid, color="red")
             ax1_main.set_xticklabels([])
-            ax1_main.set_title("SIM " + str(idx + 1) +
-                         " (IR: " + str(np.round(100 * subnets_scale[indice], 2)) + "%)", fontsize=16)
+            ax1_main.set_title("SIM " + str(idx + 1) + 
+                         " (IR: " + str(np.round(100 * item["ir"], 2)) + "%)", fontsize=16)
             fig.add_subplot(ax1_main)
 
             ax1_density = fig.add_subplot(inner[1, 0])  
@@ -447,19 +531,19 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                 ax2.set_xlim(xlim_min, xlim_max)
                 ax2.set_ylim(-1, len(coef_index.T[indice, :input_size].ravel()))
                 ax2.axvline(0, linestyle="dotted", color="black")
-            idx = idx + 1
             fig.add_subplot(ax2)
-            
-        for i, indice in enumerate(active_categ_index):
+        
+        for idx, (key, item) in enumerate(self.active_dummy_subnets_.items()):
 
+            indice = item["indice"]
             feature_name = self.cfeature_list_[indice - self.subnet_num]
             norm = self.categ_blocks.categnets[indice - self.subnet_num].moving_norm.numpy()
             dummy_values = self.dummy_density_[feature_name]["density"]["values"]
             dummy_scores = self.dummy_density_[feature_name]["density"]["scores"]
             dummy_coef = self.categ_blocks.categnets[indice - self.subnet_num].categ_bias.numpy()
-            dummy_coef = beta[indice] * dummy_coef[:, 0] / norm
+            dummy_coef = np.sign(item["beta"]) * dummy_coef[:, 0] / norm
 
-            ax_main = fig.add_subplot(outer[len(active_index) + idx])
+            ax_main = fig.add_subplot(outer[len(self.active_subnets_) + idx])
             ax_density = ax_main.twinx()
             ax_density.bar(np.arange(len(dummy_values)), dummy_scores, width=0.6)
             ax_density.set_ylim(0, dummy_scores.max() * 1.2)
@@ -480,16 +564,15 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                              " (IR: " + str(np.round(100 * self.importance_ratios_[feature_name]["ir"], 2)) + "%)", fontsize=16)
             ax_main.set_zorder(ax_density.get_zorder() + 1)
             ax_main.patch.set_visible(False)
-            idx = idx + 1
-            
+
         plt.show()
         if max_ids > 0:
             save_path = folder + name
-            if save_eps:
-                if not os.path.exists(folder):
-                    os.makedirs(folder)
-                fig.savefig("%s.eps" % save_path, bbox_inches="tight", dpi=100)
             if save_png:
                 if not os.path.exists(folder):
                     os.makedirs(folder)
-                fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
+                f.savefig("%s.png" % save_path, bbox_inches='tight', dpi=100)
+            if save_eps:
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                f.savefig("%s.eps" % save_path, bbox_inches='tight', dpi=100)
