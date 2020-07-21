@@ -481,12 +481,12 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             
         plt.show()
         if max_depth > 0:
-        save_path = folder + name
-        if save_eps:
-            if not os.path.exists(folder):
-                os.makedirs(folder)
-            fig.savefig("%s.eps" % save_path, bbox_inches="tight", dpi=100)
-        if save_png:
-            if not os.path.exists(folder):
-                os.makedirs(folder)
-            fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
+            save_path = folder + name
+            if save_eps:
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                fig.savefig("%s.eps" % save_path, bbox_inches="tight", dpi=100)
+            if save_png:
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
