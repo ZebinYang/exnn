@@ -285,8 +285,9 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
         self.subnet_input_density = []
         self.evaluate(tr_x, tr_y, training=True) # update the batch normalization using all the training data
         for i in range(self.subnet_num):
-            min_ = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i].min()
-            max_ = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i].max()
+            xb = np.dot(tr_x[:,self.nfeature_index_list_], self.proj_layer.get_weights()[0])[:, i]
+            min_ = xb.min()
+            max_ = xb.max()
             self.subnet_input_min.append(min_)
             self.subnet_input_max.append(max_)
             self.subnet_input_density.append(self.estimate_density(xb))
@@ -405,7 +406,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             max_ = self.subnet_input_max[indice]
             density, bins = self.subnet_input_density[indice]
             xgrid = np.linspace(min_, max_, 1000).reshape([-1, 1])
-            ygrid = np.sign(item["beta"]) * subnet.__call__(tf.cast(tf.constant(xgrid), tf.float32)).numpy()
+            ygrid = beta[indice] * subnet.__call__(tf.cast(tf.constant(xgrid), tf.float32)).numpy()
 
             if coef_index[np.argmax(np.abs(coef_index[:, indice])), indice] < 0:
                 coef_index[:, indice] = - coef_index[:, indice]
@@ -413,8 +414,8 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
 
             ax1_main.plot(xgrid, ygrid, color="red")
             ax1_main.set_xticklabels([])
-            ax1_main.set_title("SIM " + str(idx + 1) + 
-                         " (IR: " + str(np.round(100 * item["ir"], 2)) + "%)", fontsize=16)
+            ax1_main.set_title("SIM " + str(idx + 1) +
+                         " (IR: " + str(np.round(100 * subnets_scale[indice], 2)) + "%)", fontsize=16)
             fig.add_subplot(ax1_main)
 
             ax1_density = fig.add_subplot(inner[1, 0])  
@@ -454,7 +455,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             dummy_values = self.dummy_density_[feature_name]["density"]["values"]
             dummy_scores = self.dummy_density_[feature_name]["density"]["scores"]
             dummy_coef = self.categ_blocks.categnets[indice - self.subnet_num].categ_bias.numpy()
-            dummy_coef = np.sign(item["beta"]) * dummy_coef[:, 0] / norm
+            dummy_coef = beta[indice] * dummy_coef[:, 0] / norm
 
             ax_main = fig.add_subplot(outer[len(active_index) + idx])
             ax_density = ax_main.twinx()
