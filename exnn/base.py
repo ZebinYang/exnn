@@ -441,9 +441,9 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
 
         if self.cfeature_num_ > 0:
             for indice in active_categ_index:
-                feature_name = self.cfeature_list_[indice - self.numerical_input_num]
-                dummy_gamma = self.categ_blocks.categnets[indice - self.numerical_input_num].categ_bias.numpy()
-                norm = self.categ_blocks.categnets[indice - self.numerical_input_num].moving_norm.numpy()
+                feature_name = self.cfeature_list_[indice - self.subnet_num]
+                dummy_gamma = self.categ_blocks.categnets[indice - self.subnet_num].categ_bias.numpy()
+                norm = self.categ_blocks.categnets[indice - self.subnet_num].moving_norm.numpy()
                 ax3 = fig.add_subplot(np.int(max_ids), 1, np.int(max_ids))
                 ax3.bar(np.arange(len(self.dummy_values_[feature_name])), np.sign(beta[indice]) * dummy_gamma[:, 0] / norm)
                 ax3.set_xticks(np.arange(len(self.dummy_values_[feature_name])))
