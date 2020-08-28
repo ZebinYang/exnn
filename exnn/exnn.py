@@ -6,7 +6,7 @@ class ExNN(BaseNet):
     """
     Enhanced explainable neural network (ExNN) based on sparse, orthogonal and smooth constraints.
 
-    ExNN is based on our paper (Yang et al. 2018) with the following implementation details:
+    ExNN is based on our paper (Yang et al. 2020 TNNLS) with the following implementation details:
 
     1. Categorical variables should be first converted by one-hot encoding, and we directly link each of the dummy variables as a bias term to final output.
 
@@ -80,7 +80,7 @@ class ExNN(BaseNet):
 
     References
     ----------
-    .. Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of Neural Networks through Architecture Constraints." arXiv preprint arXiv:1901.03838 (2019).
+    .. Yang, Zebin, Aijun Zhang, and Agus Sudjianto. "Enhancing Explainability of Neural Networks through Architecture Constraints." TNNLS (2020).
 
     """
 

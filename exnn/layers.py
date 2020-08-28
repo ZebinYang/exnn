@@ -46,7 +46,7 @@ class CategNet(tf.keras.layers.Layer):
         self.cagetnet_id = cagetnet_id
 
         self.categ_bias = self.add_weight(name="cate_bias_" + str(self.cagetnet_id),
-                                                 shape=[self.depth, 1],
+                                                 shape=[self.category_num, 1],
                                                  initializer=tf.zeros_initializer(),
                                                  trainable=True)
         self.moving_mean = self.add_weight(name="mean" + str(self.cagetnet_id), shape=[1], initializer=tf.zeros_initializer(), trainable=False)
@@ -54,7 +54,7 @@ class CategNet(tf.keras.layers.Layer):
         
     def call(self, inputs, training=False):
 
-        dummy = tf.one_hot(indices=tf.cast(inputs[:, 0], tf.int32), depth=self.depth)
+        dummy = tf.one_hot(indices=tf.cast(inputs[:, 0], tf.int32), depth=self.category_num)
         self.output_original = tf.matmul(dummy, self.categ_bias)
 
         if training:

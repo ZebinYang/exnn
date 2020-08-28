@@ -4,7 +4,7 @@ from .base import BaseNet
 
 class GAMNet(BaseNet):
     """
-    Generalized additive model vai neural network implementation. It is just a simplified version of sosxnn with identity projection layer.
+    Generalized additive model vai neural network implementation. It is just a simplified version of exnn with identity projection layer.
 
     Parameters
     ----------
