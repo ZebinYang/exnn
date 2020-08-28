@@ -84,16 +84,16 @@ class CategNetBlock(tf.keras.layers.Layer):
         self.bn_flag = bn_flag
 
         self.categnets = []
-        for i in self.cfeature_index_list:
-            feature_name = self.feature_list[i]
+        for i, idx in enumerate(self.cfeature_index_list):
+            feature_name = self.feature_list[idx]
             self.categnets.append(CategNet(category_num=len(self.dummy_values[feature_name]), bn_flag=self.bn_flag, cagetnet_id=i))
         
     def call(self, inputs, training=False):
         output = 0
         if len(self.cfeature_index_list) > 0:
             self.categ_output = []
-            for i in self.cfeature_index_list:
-                self.categ_output.append(self.categnets[i](tf.gather(inputs, [self.cfeature_index_list[i]], axis=1), training=training))
+            for i, idx in enumerate(self.cfeature_index_list):
+                self.categ_output.append(self.categnets[i](tf.gather(inputs, [idx], axis=1), training=training))
             output = tf.reshape(tf.squeeze(tf.stack(self.categ_output, 1)), [-1, len(self.cfeature_index_list)])
         return output
 
