@@ -572,8 +572,8 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             if save_png:
                 if not os.path.exists(folder):
                     os.makedirs(folder)
-                f.savefig("%s.png" % save_path, bbox_inches='tight', dpi=100)
+                fig.savefig("%s.png" % save_path, bbox_inches='tight', dpi=100)
             if save_eps:
                 if not os.path.exists(folder):
                     os.makedirs(folder)
-                f.savefig("%s.eps" % save_path, bbox_inches='tight', dpi=100)
+                fig.savefig("%s.eps" % save_path, bbox_inches='tight', dpi=100)
