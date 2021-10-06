@@ -467,7 +467,6 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
                     os.makedirs(folder)
                 fig.savefig("%s.png" % save_path, bbox_inches="tight", dpi=100)
                 
-                
     def visualize_new(self, cols_per_row=3, subnet_num=10**5, dummy_subnet_num=10**5, show_indices=10**5,
                   folder="./results/", name="demo", save_png=False, save_eps=False):
 
@@ -484,7 +483,7 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             xlim_min = - max(np.abs(projection_indices.min() - 0.1), np.abs(projection_indices.max() + 0.1))
             xlim_max = max(np.abs(projection_indices.min() - 0.1), np.abs(projection_indices.max() + 0.1))
         for idx, (key, item) in enumerate(active_subnets):
-            
+
             indice = item["indice"]
             inner = outer[idx].subgridspec(2, 2, wspace=0.15, height_ratios=[6, 1], width_ratios=[3, 1])
             ax1_main = fig.add_subplot(inner[0, 0])
@@ -498,7 +497,9 @@ class BaseNet(tf.keras.Model, metaclass=ABCMeta):
             if coef_index[np.argmax(np.abs(coef_index[:, indice])), indice] < 0:
                 coef_index[:, indice] = - coef_index[:, indice]
                 xgrid = - xgrid
-
+                bins = - bins[::-1]
+                density = density[::-1]
+                
             ax1_main.plot(xgrid, ygrid, color="red")
             ax1_main.set_xticklabels([])
             ax1_main.set_title("SIM " + str(idx + 1) + 
