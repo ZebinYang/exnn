@@ -119,6 +119,7 @@ model.visualize("./", "exnn_demo")
 
 Citations
 ----------
+```latex
 @article{yang2021enhancing,
 	author={Yang, Zebin and Zhang, Aijun and Sudjianto, Agus},
 	journal={IEEE Transactions on Neural Networks and Learning Systems}, 
@@ -129,3 +130,4 @@ Citations
 	pages={2610-2621},
 	doi={10.1109/TNNLS.2020.3007259}
 }
+```
